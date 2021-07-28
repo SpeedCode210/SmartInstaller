@@ -38,7 +38,7 @@ Doit être un fichier zip contenant: un dossier bin contenant l'application et u
 {
   "Name": "Hieroctive",
   "MainExe": "Hieroctive.exe",
-  "VersionName": "1.2{NomDeVersion}",
+  "VersionName": "1.2",
   "VersionCode": 3, 
   "Date": "02/07/2021"
 }
