@@ -48,7 +48,7 @@ namespace SmartInstaller
         {
             var assembly = typeof(MainWindow).GetTypeInfo().Assembly;
 
-            var stream = assembly.GetManifestResourceStream("EclipiumInstaller." + filename);
+            var stream = assembly.GetManifestResourceStream("SmartInstaller." + filename);
 
             return stream;
         }
@@ -64,8 +64,8 @@ namespace SmartInstaller
             btn.IsEnabled = false;
             btn.Content = "En cours";
             string result = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            Directory.CreateDirectory(result + "\\TempEclipium");
-            TempDir = result + "\\TempEclipium\\";
+            Directory.CreateDirectory(result + "\\TempSmartInstaller");
+            TempDir = result + "\\TempSmartInstaller\\";
 
             ProgressMessage = "Téléchargement";
             txt.Content = ProgressMessage;
@@ -112,8 +112,8 @@ namespace SmartInstaller
 
 
 
-                Directory.CreateDirectory(a + "\\Eclipium");
-                DirectoryInfo dir = new DirectoryInfo(a + "\\Eclipium\\" + f.Name);
+                Directory.CreateDirectory(a + "\\SmartInstaller");
+                DirectoryInfo dir = new DirectoryInfo(a + "\\SmartInstaller\\" + f.Name);
 
                 if(dir.Exists)
                 {
@@ -127,11 +127,11 @@ namespace SmartInstaller
                         dirt.Delete(true);
                     }
                 }
-                DirectoryCopy(TempDir + "bin", a + "\\Eclipium\\" + f.Name, true);
+                DirectoryCopy(TempDir + "bin", a + "\\SmartInstaller\\" + f.Name, true);
                 var remover = GetStreamFromFile("Remove.exe");
-                SaveStreamAsFile(a + "\\Eclipium\\" + f.Name + "\\" + "Remove.exe", remover);
+                SaveStreamAsFile(a + "\\SmartInstaller\\" + f.Name + "\\" + "Remove.exe", remover);
 
-                System.IO.File.Move(TempDir + "package.json", a + "\\Eclipium\\" + f.Name + "\\package.json");
+                System.IO.File.Move(TempDir + "package.json", a + "\\SmartInstaller\\" + f.Name + "\\package.json");
                 System.IO.DirectoryInfo di = new DirectoryInfo(TempDir);
 
                 foreach(FileInfo file in di.GetFiles())
@@ -143,9 +143,9 @@ namespace SmartInstaller
                     dirt.Delete(true);
                 }
                 Directory.Delete(TempDir);
-                CreateShortcut(f.Name, Environment.GetFolderPath(Environment.SpecialFolder.Desktop), a + "\\Eclipium\\" + f.Name + "\\" + f.MainExe);
-                CreateShortcut(f.Name, Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), a + "\\Eclipium\\" + f.Name + "\\" + f.MainExe);
-                CreateShortcut(f.Name + " Uninstaller", Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), a + "\\Eclipium\\" + f.Name + "\\" + "Remove.exe");
+                CreateShortcut(f.Name, Environment.GetFolderPath(Environment.SpecialFolder.Desktop), a + "\\SmartInstaller\\" + f.Name + "\\" + f.MainExe);
+                CreateShortcut(f.Name, Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), a + "\\SmartInstaller\\" + f.Name + "\\" + f.MainExe);
+                CreateShortcut(f.Name + " Uninstaller", Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), a + "\\SmartInstaller\\" + f.Name + "\\" + "Remove.exe");
                 UninstallRegistery();
                 Progress = 200;
                 pb.Value = Progress;
@@ -178,13 +178,13 @@ namespace SmartInstaller
             RegistryKey UninstallKey = Registry.LocalMachine.OpenSubKey("SOFTWARE", true).OpenSubKey("Microsoft", true)
                 .OpenSubKey("Windows", true).OpenSubKey("CurrentVersion", true).OpenSubKey("Uninstall", true)
                 .CreateSubKey(ApplicationName, true);
-            UninstallKey.SetValue("DisplayIcon", a + "\\Eclipium\\" + f.Name + "\\" + f.MainExe, RegistryValueKind.String);
+            UninstallKey.SetValue("DisplayIcon", a + "\\SmartInstaller\\" + f.Name + "\\" + f.MainExe, RegistryValueKind.String);
             UninstallKey.SetValue("DisplayName", ApplicationName, RegistryValueKind.String);
             UninstallKey.SetValue("DisplayVersion", f.VersionName, RegistryValueKind.String);
             UninstallKey.SetValue("Publisher", "Eclipium", RegistryValueKind.String);
-            UninstallKey.SetValue("UninstallPath", a + "\\Eclipium\\" + f.Name + "\\" + "Remove.exe", RegistryValueKind.String);
-            UninstallKey.SetValue("UninstallString", a + "\\Eclipium\\" + f.Name + "\\" + "Remove.exe", RegistryValueKind.String);
-            UninstallKey.SetValue("InstallLocation", a + "\\Eclipium\\" + f.Name, RegistryValueKind.String);
+            UninstallKey.SetValue("UninstallPath", a + "\\SmartInstaller\\" + f.Name + "\\" + "Remove.exe", RegistryValueKind.String);
+            UninstallKey.SetValue("UninstallString", a + "\\SmartInstaller\\" + f.Name + "\\" + "Remove.exe", RegistryValueKind.String);
+            UninstallKey.SetValue("InstallLocation", a + "\\SmartInstaller\\" + f.Name, RegistryValueKind.String);
             UninstallKey.SetValue("NoModify", 1, RegistryValueKind.DWord);
             UninstallKey.SetValue("NoRepair", 1, RegistryValueKind.DWord);
         }
