@@ -7,12 +7,12 @@ Un installeur réalisé sous WPF en C# moderne épuré avec une interface style 
 ## Configuration requise pour la compilation
 - .NET Framework 4.8 ou supérieur
 
--Visual studio 2019 ou supérieur
+- Visual studio 2019 ou supérieur
 
 ## Configuration requise pour l'utilisateur
 - .NET Framework 4.8 ou supérieur
 
--Windows 10 ou supérieur
+- Windows 10 ou supérieur
 
 ## Génération de l'installeur
 
