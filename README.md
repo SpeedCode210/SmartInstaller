@@ -5,14 +5,14 @@ Un installeur réalisé sous WPF en C# moderne épuré avec une interface style 
 ![Capture d'écran](https://raw.githubusercontent.com/eclipium/SmartInstaller/master/screen.png)
 
 ## Configuration requise pour la compilation
--.Net Framework 4.8 ou supérieur
+- .NET Framework 4.8 ou supérieur
 
--Visual studio 2017 ou supérieur
+- Visual studio 2019 ou supérieur
 
 ## Configuration requise pour l'utilisateur
--.Net Framework 4.8 ou supérieur
+- .NET Framework 4.8 ou supérieur
 
--Windows 7 ou plus
+- Windows 10 ou supérieur
 
 ## Génération de l'installeur
 
