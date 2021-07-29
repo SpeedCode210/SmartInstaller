@@ -55,14 +55,25 @@ namespace SmartInstaller
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                System.IO.File.Delete(TempDir + "arch.zip");
+            }
+            catch { }
+            try
+            {
+                Directory.Delete(TempDir); 
+            }
+            catch { }
             Application.Current.Shutdown();
         }
 
         private void btnDownload_Click(object sender, RoutedEventArgs e)
         {
             btn = (Button)sender;
-            btn.IsEnabled = false;
-            btn.Content = "En cours";
+            btn.Content = "Annuler";
+            btn.Click -= btnDownload_Click;
+            btn.Click += Button_Click;
             string result = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
             Directory.CreateDirectory(result + "\\TempSmartInstaller");
             TempDir = result + "\\TempSmartInstaller\\";
@@ -79,14 +90,17 @@ namespace SmartInstaller
         {
             Progress = e.ProgressPercentage;
             pb.Value = Progress;
+            ProgressMessage = "Téléchargement "+e.ProgressPercentage+"%";
+            txt.Content = ProgressMessage;
         }
 
         private async void Completed(object sender, AsyncCompletedEventArgs e)
         {
+            await Task.Delay(500);
             bool b = true;
             ProgressMessage = "Extraction";
             txt.Content = ProgressMessage;
-            await Task.Delay(1000);
+            await Task.Delay(100);
             try
             {
                 ZipFile.ExtractToDirectory(TempDir + "arch.zip", TempDir);
@@ -108,7 +122,7 @@ namespace SmartInstaller
                 pb.Value = Progress;
                 ProgressMessage = "Installation";
                 txt.Content = ProgressMessage;
-                await Task.Delay(1000);
+                await Task.Delay(100);
 
 
 
@@ -151,14 +165,13 @@ namespace SmartInstaller
                 pb.Value = Progress;
                 ProgressMessage = "Installation terminée";
                 txt.Content = ProgressMessage;
-                await Task.Delay(5000);
-                Application.Current.Shutdown();
+                btn.Content = "Quitter";
             }
             else
             {
                 try
                 {
-                    System.IO.File.Delete(TempDir + "arch.7z");
+                    System.IO.File.Delete(TempDir + "arch.zip");
 
                 }
                 catch { }
@@ -169,7 +182,6 @@ namespace SmartInstaller
                 pb.Value = Progress;
                 ProgressMessage = "Pas d'internet, veuillez réessayer plus tard";
                 txt.Content = ProgressMessage;
-                btn.IsEnabled = true;
             }
         }
 
