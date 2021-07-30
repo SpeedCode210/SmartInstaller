@@ -19,7 +19,6 @@
                                 <DropShadowEffect BlurRadius="5" ShadowDepth="0" Opacity="0.3" Direction="225" />
                             </Border.Effect>
                             <Grid x:Name="PART_Track">
-                                <!--<Rectangle x:Name="PART_Indicator" HorizontalAlignment="Left" Fill="#FF2BA9FF" />-->
                                 <Border x:Name="PART_Indicator" HorizontalAlignment="Left" BorderBrush="#D9DCE1" BorderThickness="0" Background="#005FB8" CornerRadius="5" Padding="0">
                                 </Border>
                             </Grid>
@@ -33,12 +32,12 @@
 
     </Window.Resources>
     <Grid>
-        <Border Background="#fff" BorderThickness="0" Margin="18" BorderBrush="Transparent" CornerRadius="8,8,8,8">
+        <Border Background="#fff" BorderThickness="0" Margin="18" BorderBrush="Transparent" CornerRadius="8,8,8,8" MouseLeftButtonDown="Border_MouseLeftButtonDown">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="18" ShadowDepth="0" Opacity="0.3" Direction="225" />
             </Border.Effect>
             <Grid>
-                <Button Click="Button_Click" HorizontalAlignment="Left" Margin="728,0,0,0" VerticalAlignment="Top" Height="31" Width="46" FontSize="19" BorderBrush="{x:Null}" OpacityMask="#FF464646">
+                <Button Click="Button_Click" HorizontalAlignment="Right" VerticalAlignment="Top" Height="31" Width="46" FontSize="19" BorderBrush="{x:Null}" OpacityMask="#FF464646">
                     <Button.Style>
                         <Style TargetType="{x:Type Button}">
                             <Setter Property="Background" Value="Transparent"/>
@@ -60,12 +59,12 @@
                             </Style.Triggers>
                         </Style>
                     </Button.Style>
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe MDL2 Assets" FontSize="15" TextOptions.TextRenderingMode="Grayscale" Height="16" Width="24"><Run Text=" "/><Run Text="&#xEDAE;"/></TextBlock>
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="./#Segoe Fluent Icons" FontSize="15" TextOptions.TextRenderingMode="Grayscale" Height="16" Width="24"><Run Text=" "/><Run Text="&#xEDAE;"/></TextBlock>
                 </Button>
-                <Label Foreground="#101010" Content="Smart Installer" VerticalContentAlignment="Center" FontWeight="DemiBold" FontSize="15" Margin="10,0,118,393" />
+                <Label Foreground="#101010" Content="Smart Installer" FontFamily="./#Segoe UI Variable Small Light" VerticalContentAlignment="Center" FontWeight="DemiBold" FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                 <Image x:Name="Logo" Margin="132,102,498,176" />
-                <Label Foreground="#101010" Content="Programme d'installation de" VerticalContentAlignment="Top" FontSize="26" FontWeight="Normal" Margin="290,123,0,257"  />
-                <Label Foreground="#202020" x:Name="title" Content="ApplicationName"  VerticalContentAlignment="Bottom" FontSize="50" FontWeight="SemiBold" Margin="290,148,0,188"  />
+                <Label Foreground="#101010" Content="Programme d'installation de" FontFamily="./#Segoe UI Variable Display" VerticalContentAlignment="Top" FontSize="26" FontWeight="Normal" Margin="290,123,0,257"  />
+                <Label Foreground="#202020" x:Name="title" Content="ApplicationName" FontFamily="./#Segoe UI Variable Text Semiligh" VerticalContentAlignment="Bottom" FontSize="50" Margin="290,148,0,188"  />
                 <Rectangle Fill="#E5E5E5" Margin="0,298,0,124" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -86,9 +85,9 @@
                         </TransformGroup>
                     </Border.RenderTransform>
                     <Grid>
-                        <Label x:Name="txt" Content="Appuyez sur &quot;Installer&quot;" Foreground="#303030" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Center" FontSize="15" FontWeight="Normal" Margin="0,-5,0,75" />
+                        <Label x:Name="txt" FontFamily="./#Segoe UI Variable Display" Content="Appuyez sur &quot;Installer&quot;" Foreground="#202020" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Center" FontSize="16" FontWeight="Normal" Margin="0,-5,0,75" />
                         <ProgressBar x:Name="pb" Width="700" Minimum="0" Maximum="200" Grid.ColumnSpan="2" Margin="42,54,32,60" />
-                        <Button Content="Installer" Click="btnDownload_Click" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" Width="184" FontSize="19"  Foreground="#151515" Margin="293,74,297,0">
+                        <Button Content="Installer" FontFamily="./#Segoe UI Variable Display" Click="btnDownload_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Width="184" FontSize="19"  Foreground="#151515" Margin="10">
                             <Button.Style>
                                 <Style TargetType="{x:Type Button}">
                                     <Setter Property="Background" Value="#fff"/>
@@ -111,6 +110,32 @@
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>
+                        </Button>
+                        <Button Name="settingsButton" Click="settingsButton_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Width="40" FontSize="19"  Foreground="#151515" Margin="0,0,240,10">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Background" Value="#fff"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect BlurRadius="5" ShadowDepth="0" Opacity="0.3" Direction="225" />
+                                                    </Border.Effect>
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#eeeeee"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="./#Segoe Fluent Icons" FontSize="22" TextOptions.TextRenderingMode="Grayscale" Height="22" Width="34"><Run Text=" "/><Run Text="&#xE713;"/></TextBlock>
+
                         </Button>
                     </Grid>
                 </Border>

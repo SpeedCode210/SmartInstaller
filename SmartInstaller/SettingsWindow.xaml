@@ -1,0 +1,181 @@
+﻿<Window x:Class="SmartInstaller.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SmartInstaller"
+        mc:Ignorable="d"
+        Title="Paramètres de l'installation" Height="250" Width="500" WindowStyle="None" Background="Transparent" AllowsTransparency="True" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Window.Resources>
+        <Style TargetType="{x:Type CheckBox}">
+            <Setter Property="OverridesDefaultStyle"
+          Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Background="White" x:Name="border" CornerRadius="4" Margin="5" Height="18" Width="18" BorderBrush="#8B8B8B" BorderThickness="1" >
+                                <TextBlock Foreground="Transparent" x:Name="checkText" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="./#Segoe Fluent Icons" FontSize="13" TextOptions.TextRenderingMode="Grayscale" Height="13" Width="20" ><Run Text=" "/><Run Text="&#xE73E;"/></TextBlock>
+                            </Border>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="checkText" Property="Foreground" Value="White"/>
+                                <Setter TargetName="border" Property="Background" Value="#005FB8"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="Transparent"/>
+                                <Setter TargetName="border" Property="Height" Value="20"/>
+                                <Setter TargetName="border" Property="Width" Value="20"/>
+                                <Setter TargetName="border" Property="Margin" Value="4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="OverridesDefaultStyle"
+          Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBoxBase}">
+                        <Grid>
+                            <Border Background="White" Margin="5" Height="25" BorderThickness="0" CornerRadius="4">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="4" ShadowDepth="0" Opacity="0.3" Direction="225" />
+                                </Border.Effect>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                                    <EasingColorKeyFrame KeyTime="0"
+                                         Value="#eeeeee" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="ReadOnly">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                                    <EasingColorKeyFrame KeyTime="0"
+                                         Value="#303030" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="MouseOver" />
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
+                            </Border>
+                            <Border Background="#005FB8" Height="2" Margin="5,0,5,5" VerticalAlignment="Bottom" CornerRadius="0,0,5,5"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Border Background="#fff" BorderThickness="0" Margin="18" BorderBrush="Transparent" CornerRadius="8,8,8,8" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="18" ShadowDepth="0" Opacity="0.3" Direction="225" />
+            </Border.Effect>
+            <Grid>
+                <Button Click="Button_Click" HorizontalAlignment="Right" VerticalAlignment="Top" Height="31" Width="46" FontSize="19" BorderBrush="{x:Null}" OpacityMask="#FF464646">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="0,8,0,0">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#C71701"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="./#Segoe Fluent Icons" FontSize="15" TextOptions.TextRenderingMode="Grayscale" Height="16" Width="24"><Run Text=" "/><Run Text="&#xEDAE;"/></TextBlock>
+                </Button>
+                <Label Foreground="#101010" Content="Paramètres de l'installation" FontFamily="./#Segoe UI Variable Small Light" VerticalContentAlignment="Center" FontWeight="DemiBold" FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <StackPanel Margin="10" VerticalAlignment="Bottom" Height="170">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Chemin d'installation" FontFamily="./#Segoe UI Variable Display" FontSize="15" VerticalAlignment="Center"/>
+                        <TextBox Name="path" FontFamily="./#Segoe UI Variable Display" Width="250" VerticalContentAlignment="Center"/>
+                        <Button Name="pathButton" Click="pathButton_Click" HorizontalAlignment="Center" VerticalAlignment="Top" Height="25" Width="25"  Foreground="#151515" Margin="5">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Background" Value="#fff"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect BlurRadius="5" ShadowDepth="0" Opacity="0.3" Direction="225" />
+                                                    </Border.Effect>
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#eeeeee"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="./#Segoe Fluent Icons" FontSize="22" TextOptions.TextRenderingMode="Grayscale" Height="22" Width="35"><Run Text=" "/><Run Text="&#xE712;"/></TextBlock>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Name="desktopShortcut" IsChecked="True" VerticalAlignment="Center"/>
+                        <Label Content="Créer un raccourci sur le bureau" FontFamily="./#Segoe UI Variable Display" FontSize="15" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Name="autoStart" IsChecked="False" VerticalAlignment="Center"/>
+                        <Label Content="Lancer l'application à la fin de l'installation" FontFamily="./#Segoe UI Variable Display" FontSize="15" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+                <Button Name="validate" Content="Valider" FontFamily="./#Segoe UI Variable Display" Click="validate_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Width="184" FontSize="19"  Foreground="#151515" Margin="15">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Background" Value="#fff"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                                            <Border.Effect>
+                                                <DropShadowEffect BlurRadius="5" ShadowDepth="0" Opacity="0.3" Direction="225" />
+                                            </Border.Effect>
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#eeeeee"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

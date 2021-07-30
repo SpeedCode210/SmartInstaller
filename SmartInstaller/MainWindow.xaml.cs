@@ -24,8 +24,12 @@ namespace SmartInstaller
         private string TempDir;
         private Button btn;
         public int Progress;
-        private string a = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+        private string ProgramFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+        public string InstallationPath;
         private Foo f;
+
+        public bool autoStart = false;
+        public bool desktopShortcut = true;
 
         public MainWindow()
         {
@@ -41,6 +45,7 @@ namespace SmartInstaller
             ProgressMessage = "Appuyez sur \"Installer\"";
             txt.Content = ProgressMessage;
             ApplicationUrl = AppUrl;
+            InstallationPath = ProgramFiles;
             Logo.Source = new BitmapImage(new Uri(ImageUrl));
         }
 
@@ -62,9 +67,17 @@ namespace SmartInstaller
             catch { }
             try
             {
-                Directory.Delete(TempDir); 
+                Directory.Delete(TempDir);
             }
             catch { }
+            if (autoStart && (string)btn.Content == "Quitter")
+            {
+                System.Diagnostics.Process p = new System.Diagnostics.Process();
+                p.StartInfo.FileName = InstallationPath + "\\" + ApplicationName + "\\" + f.MainExe;
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.Start();
+            }
             Application.Current.Shutdown();
         }
 
@@ -90,7 +103,7 @@ namespace SmartInstaller
         {
             Progress = e.ProgressPercentage;
             pb.Value = Progress;
-            ProgressMessage = "Téléchargement "+e.ProgressPercentage+"%";
+            ProgressMessage = "Téléchargement " + e.ProgressPercentage + "%";
             txt.Content = ProgressMessage;
         }
 
@@ -106,15 +119,15 @@ namespace SmartInstaller
                 ZipFile.ExtractToDirectory(TempDir + "arch.zip", TempDir);
 
             }
-            catch(FileNotFoundException)
+            catch (FileNotFoundException)
             {
                 b = false;
             }
-            catch(InvalidDataException)
+            catch (InvalidDataException)
             {
                 b = false;
             }
-            if(b)
+            if (b)
             {
                 string js = System.IO.File.ReadAllText(TempDir + "package.json");
                 f = JsonConvert.DeserializeObject<Foo>(js);
@@ -126,40 +139,40 @@ namespace SmartInstaller
 
 
 
-                Directory.CreateDirectory(a + "\\SmartInstaller");
-                DirectoryInfo dir = new DirectoryInfo(a + "\\SmartInstaller\\" + f.Name);
+                Directory.CreateDirectory(InstallationPath + "\\" + ApplicationName);
+                DirectoryInfo dir = new DirectoryInfo(InstallationPath + "\\" + ApplicationName);
 
-                if(dir.Exists)
+                if (dir.Exists)
                 {
 
-                    foreach(FileInfo file in dir.GetFiles())
+                    foreach (FileInfo file in dir.GetFiles())
                     {
                         file.Delete();
                     }
-                    foreach(DirectoryInfo dirt in dir.GetDirectories())
+                    foreach (DirectoryInfo dirt in dir.GetDirectories())
                     {
                         dirt.Delete(true);
                     }
                 }
-                DirectoryCopy(TempDir + "bin", a + "\\SmartInstaller\\" + f.Name, true);
+                DirectoryCopy(TempDir + "bin", InstallationPath + "\\" + ApplicationName, true);
                 var remover = GetStreamFromFile("Remove.exe");
-                SaveStreamAsFile(a + "\\SmartInstaller\\" + f.Name + "\\" + "Remove.exe", remover);
+                SaveStreamAsFile(InstallationPath + "\\" + ApplicationName + "\\" + "Remove.exe", remover);
 
-                System.IO.File.Move(TempDir + "package.json", a + "\\SmartInstaller\\" + f.Name + "\\package.json");
+                System.IO.File.Move(TempDir + "package.json", InstallationPath + "\\" + ApplicationName + "\\package.json");
                 System.IO.DirectoryInfo di = new DirectoryInfo(TempDir);
 
-                foreach(FileInfo file in di.GetFiles())
+                foreach (FileInfo file in di.GetFiles())
                 {
                     file.Delete();
                 }
-                foreach(DirectoryInfo dirt in di.GetDirectories())
+                foreach (DirectoryInfo dirt in di.GetDirectories())
                 {
                     dirt.Delete(true);
                 }
                 Directory.Delete(TempDir);
-                CreateShortcut(f.Name, Environment.GetFolderPath(Environment.SpecialFolder.Desktop), a + "\\SmartInstaller\\" + f.Name + "\\" + f.MainExe);
-                CreateShortcut(f.Name, Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), a + "\\SmartInstaller\\" + f.Name + "\\" + f.MainExe);
-                CreateShortcut(f.Name + " Uninstaller", Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), a + "\\SmartInstaller\\" + f.Name + "\\" + "Remove.exe");
+                if (desktopShortcut) CreateShortcut(ApplicationName, Environment.GetFolderPath(Environment.SpecialFolder.Desktop), InstallationPath + "\\" + ApplicationName + "\\" + f.MainExe);
+                CreateShortcut(ApplicationName, Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), InstallationPath + "\\" + ApplicationName + "\\" + f.MainExe);
+                CreateShortcut(ApplicationName + " Uninstaller", Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), InstallationPath + "\\" + ApplicationName + "\\" + "Remove.exe");
                 UninstallRegistery();
                 Progress = 200;
                 pb.Value = Progress;
@@ -182,6 +195,9 @@ namespace SmartInstaller
                 pb.Value = Progress;
                 ProgressMessage = "Pas d'internet, veuillez réessayer plus tard";
                 txt.Content = ProgressMessage;
+                btn.Content = "installer";
+                btn.Click -= Button_Click;
+                btn.Click += btnDownload_Click;
             }
         }
 
@@ -190,13 +206,13 @@ namespace SmartInstaller
             RegistryKey UninstallKey = Registry.LocalMachine.OpenSubKey("SOFTWARE", true).OpenSubKey("Microsoft", true)
                 .OpenSubKey("Windows", true).OpenSubKey("CurrentVersion", true).OpenSubKey("Uninstall", true)
                 .CreateSubKey(ApplicationName, true);
-            UninstallKey.SetValue("DisplayIcon", a + "\\SmartInstaller\\" + f.Name + "\\" + f.MainExe, RegistryValueKind.String);
+            UninstallKey.SetValue("DisplayIcon", InstallationPath + "\\" + ApplicationName + "\\" + f.MainExe, RegistryValueKind.String);
             UninstallKey.SetValue("DisplayName", ApplicationName, RegistryValueKind.String);
             UninstallKey.SetValue("DisplayVersion", f.VersionName, RegistryValueKind.String);
             UninstallKey.SetValue("Publisher", "Eclipium", RegistryValueKind.String);
-            UninstallKey.SetValue("UninstallPath", a + "\\SmartInstaller\\" + f.Name + "\\" + "Remove.exe", RegistryValueKind.String);
-            UninstallKey.SetValue("UninstallString", a + "\\SmartInstaller\\" + f.Name + "\\" + "Remove.exe", RegistryValueKind.String);
-            UninstallKey.SetValue("InstallLocation", a + "\\SmartInstaller\\" + f.Name, RegistryValueKind.String);
+            UninstallKey.SetValue("UninstallPath", InstallationPath + "\\" + ApplicationName + "\\" + "Remove.exe", RegistryValueKind.String);
+            UninstallKey.SetValue("UninstallString", InstallationPath + "\\" + ApplicationName + "\\" + "Remove.exe", RegistryValueKind.String);
+            UninstallKey.SetValue("InstallLocation", InstallationPath + "\\" + ApplicationName, RegistryValueKind.String);
             UninstallKey.SetValue("NoModify", 1, RegistryValueKind.DWord);
             UninstallKey.SetValue("NoRepair", 1, RegistryValueKind.DWord);
         }
@@ -205,7 +221,7 @@ namespace SmartInstaller
         {
 
             string path = filePath;
-            using(FileStream outputFileStream = new FileStream(path, FileMode.Create))
+            using (FileStream outputFileStream = new FileStream(path, FileMode.Create))
             {
                 inputStream.CopyTo(outputFileStream);
             }
@@ -228,7 +244,7 @@ namespace SmartInstaller
             // Get the subdirectories for the specified directory.
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);
 
-            if(!dir.Exists)
+            if (!dir.Exists)
             {
                 throw new DirectoryNotFoundException(
                     "Source directory does not exist or could not be found: "
@@ -242,21 +258,32 @@ namespace SmartInstaller
 
             // Get the files in the directory and copy them to the new location.
             FileInfo[] files = dir.GetFiles();
-            foreach(FileInfo file in files)
+            foreach (FileInfo file in files)
             {
                 string tempPath = Path.Combine(destDirName, file.Name);
                 file.CopyTo(tempPath, false);
             }
 
             // If copying subdirectories, copy them and their contents to new location.
-            if(copySubDirs)
+            if (copySubDirs)
             {
-                foreach(DirectoryInfo subdir in dirs)
+                foreach (DirectoryInfo subdir in dirs)
                 {
                     string tempPath = Path.Combine(destDirName, subdir.Name);
                     DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
                 }
             }
+        }
+
+        private void settingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var settings = new SettingsWindow(this);
+            settings.Show();
+        }
+
+        private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            DragMove();
         }
     }
 
