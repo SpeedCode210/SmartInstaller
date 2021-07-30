@@ -16,7 +16,15 @@ Un installeur réalisé sous WPF en C# moderne épuré avec une interface style 
 
 ## Génération de l'installeur
 
-Remplacer {AppName} par le nom de l'application, {ImageUrl} par l'url du logo de l'application et {PackageUrl} par l'url du paquet d'installation.
+Remplacer {AppName} par le nom de l'application, {ImageUrl} par l'url du logo de l'application et {PackageUrl} par l'url du paquet d'installation dans le constructeur de la classe MainWindow (fichier MainWindow.xaml.cs).
+
+```cs
+public MainWindow()
+{
+  InitializeComponent();
+  InitializeInstaller("{AppName}", "{PackageUrl}", "{ImageUrl}");
+}
+```
 
 ## Paquet d'installation
 
@@ -32,7 +40,7 @@ Doit être un fichier zip contenant: un dossier bin contenant l'application et u
 }
 ```
 
-##Exemple :
+## Exemple :
 
 ```json
 {
