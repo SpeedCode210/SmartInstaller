@@ -211,6 +211,9 @@
 del System.IO.Compression.ZipFile.dll
 del Newtonsoft.Json.xml
 del SmartInstaller.pdb
-del SmartInstaller.exe.config</PostBuildEvent>
+del SmartInstaller.exe.config
+del Ookii.Dialogs.Wpf.dll
+del Ookii.Dialogs.Wpf.pdb
+del Ookii.Dialogs.Wpf.xml</PostBuildEvent>
   </PropertyGroup>
 </Project>
