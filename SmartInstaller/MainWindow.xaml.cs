@@ -35,6 +35,7 @@ namespace SmartInstaller
         {
             InitializeComponent();
             InitializeInstaller("{AppName}", "{PackageUrl}", "{ImageUrl}");
+            //InitializeInstaller("Hieroctive", "https://launcher.eclipium.xyz/GamesPackages/Hieroctive.zip", "https://launcher.eclipium.xyz/Images/hieroctiveRounded.png");
         }
 
         private void InitializeInstaller(string AppName, string AppUrl, string ImageUrl)

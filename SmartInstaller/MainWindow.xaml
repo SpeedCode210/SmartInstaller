@@ -61,32 +61,15 @@
                     </Button.Style>
                     <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="./#Segoe Fluent Icons" FontSize="15" TextOptions.TextRenderingMode="Grayscale" Height="16" Width="24"><Run Text=" "/><Run Text="&#xEDAE;"/></TextBlock>
                 </Button>
-                <Label Foreground="#101010" Content="Smart Installer" FontFamily="./#Segoe UI Variable Small Light" VerticalContentAlignment="Center" FontWeight="DemiBold" FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                <Image x:Name="Logo" Margin="132,102,498,176" />
-                <Label Foreground="#101010" Content="Programme d'installation de" FontFamily="./#Segoe UI Variable Display" VerticalContentAlignment="Top" FontSize="26" FontWeight="Normal" Margin="290,123,0,257"  />
-                <Label Foreground="#202020" x:Name="title" Content="ApplicationName" FontFamily="./#Segoe UI Variable Text Semiligh" VerticalContentAlignment="Bottom" FontSize="50" Margin="290,148,0,188"  />
-                <Rectangle Fill="#E5E5E5" Margin="0,298,0,124" RenderTransformOrigin="0.5,0.5">
-                    <Rectangle.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform ScaleY="-1"/>
-                            <SkewTransform/>
-                            <RotateTransform/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </Rectangle.RenderTransform>
-                </Rectangle>
-                <Border Background="#eeeeee" BorderThickness="0" BorderBrush="Transparent" CornerRadius="0,0,8,8" Margin="0,300,0,0" RenderTransformOrigin="0.5,0.5">
-                    <Border.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform AngleX="-0.095"/>
-                            <RotateTransform/>
-                            <TranslateTransform X="-0.124"/>
-                        </TransformGroup>
-                    </Border.RenderTransform>
+                <Label Foreground="#101010" Content="Smart Installer" FontFamily="./#Segoe UI Variable Small Light" VerticalContentAlignment="Center" FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <Image x:Name="Logo" VerticalAlignment="Center" Width="150" Height="150" HorizontalAlignment="Left" Margin="150,0,0,60" />
+                <Label Foreground="#101010" Content="Programme d'installation de" FontFamily="./#Segoe UI Variable Display" FontSize="26" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="330,0,0,120" />
+                <Label Foreground="#202020" x:Name="title" Content="ApplicationName"  VerticalAlignment="Center" HorizontalAlignment="Left"  FontSize="50" Margin="330,0,0,20"  />
+                <Rectangle Fill="#E5E5E5" Margin="0,0,0,125" Height="2" VerticalAlignment="Bottom" />
+                <Border Background="#eeeeee" BorderThickness="0" BorderBrush="Transparent" CornerRadius="0,0,8,8" VerticalAlignment="Bottom" Height="125">
                     <Grid>
-                        <Label x:Name="txt" FontFamily="./#Segoe UI Variable Display" Content="Appuyez sur &quot;Installer&quot;" Foreground="#202020" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Center" FontSize="16" FontWeight="Normal" Margin="0,-5,0,75" />
-                        <ProgressBar x:Name="pb" Width="700" Minimum="0" Maximum="200" Grid.ColumnSpan="2" Margin="42,54,32,60" />
+                        <Label x:Name="txt" FontFamily="./#Segoe UI Variable Display" Content="Appuyez sur &quot;Installer&quot;" Foreground="#202020" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" FontSize="16" FontWeight="Normal" Margin="0,0,0,80" />
+                        <ProgressBar x:Name="pb" Width="700" Height="10" Minimum="0" Maximum="200" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,65" />
                         <Button Content="Installer" FontFamily="./#Segoe UI Variable Display" Click="btnDownload_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Width="184" FontSize="19"  Foreground="#151515" Margin="10">
                             <Button.Style>
                                 <Style TargetType="{x:Type Button}">
