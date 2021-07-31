@@ -1,8 +1,11 @@
 # SmartInstaller
 
 Un installeur web réalisé sous WPF en C# moderne épuré avec une interface style Windows 11 et simple d'utilisation.
+Il comporte aussi un thème sombre qui s'adapte à celui de windows.
 
-![Capture d'écran](https://raw.githubusercontent.com/eclipium/SmartInstaller/master/screen.png)
+![Capture d'écran](https://raw.githubusercontent.com/eclipium/SmartInstaller/master/screen1.png)
+
+![Capture d'écran](https://raw.githubusercontent.com/eclipium/SmartInstaller/master/screen2.png)
 
 ## Configuration requise pour la compilation
 - .NET Framework 4.8 ou supérieur

@@ -12,6 +12,8 @@ using Newtonsoft.Json;
 using IWshRuntimeLibrary;
 using Microsoft.Win32;
 using System.Windows.Media.Imaging;
+using System.Diagnostics;
+using System.Windows.Media;
 
 namespace SmartInstaller
 {
@@ -28,16 +30,27 @@ namespace SmartInstaller
         public string InstallationPath;
         private Foo f;
 
+        //Brushes that changes with Light or Dark theme
+        public Brush BackgroundColorBrush { get; private set; }
+        public Brush ButtonBackgroundColorBrush { get; private set; }
+        public Brush SecondBackgroundColorBrush { get; private set; }
+        public Brush AccentColorBrush { get; private set; }
+        public Brush SeparatorColorBrush { get; private set; }
+        public Brush ForegroundColorBrush { get; private set; }
+        public Brush ButtonContrastColorBrush { get; private set; }
+
         public bool autoStart = false;
         public bool desktopShortcut = true;
 
         public MainWindow()
         {
             InitializeComponent();
-            InitializeInstaller("{AppName}", "{PackageUrl}", "{ImageUrl}");
-            //InitializeInstaller("Hieroctive", "https://launcher.eclipium.xyz/GamesPackages/Hieroctive.zip", "https://launcher.eclipium.xyz/Images/hieroctiveRounded.png");
+            //InitializeInstaller("{AppName}", "{PackageUrl}", "{ImageUrl}");
+            InitializeInstaller("Hieroctive", "https://launcher.eclipium.xyz/GamesPackages/Hieroctive.zip", "https://launcher.eclipium.xyz/Images/hieroctiveRounded.png");
+            InitTheme();
         }
 
+        //Function that initialize the installer
         private void InitializeInstaller(string AppName, string AppUrl, string ImageUrl)
         {
             ApplicationName = AppName;
@@ -50,15 +63,53 @@ namespace SmartInstaller
             Logo.Source = new BitmapImage(new Uri(ImageUrl));
         }
 
-        private static Stream GetStreamFromFile(string filename)
+        //function that gets windows'default theme (Light theme for windows 8.1 and older)
+        private void InitTheme()
         {
-            var assembly = typeof(MainWindow).GetTypeInfo().Assembly;
+            bool AppsUseLightTheme = true;
+            try
+            {
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize"))
+                {
+                    if (key != null && key.GetValue("AppsUseLightTheme") != null)
+                    {
+                        Int64 value = Convert.ToInt64(key.GetValue("AppsUseLightTheme").ToString());
+                        if (value == 0)
+                            AppsUseLightTheme = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex.Message);
+            }
 
-            var stream = assembly.GetManifestResourceStream("SmartInstaller." + filename);
+            if (AppsUseLightTheme)
+            {
+                this.BackgroundColorBrush = new SolidColorBrush(Color.FromRgb(249, 249, 249));
+                this.ButtonBackgroundColorBrush = new SolidColorBrush(Color.FromRgb(249, 249, 249));
+                this.SeparatorColorBrush = new SolidColorBrush(Color.FromRgb(229, 229, 229));
+                this.SecondBackgroundColorBrush = new SolidColorBrush(Color.FromRgb(238, 238, 238));
+                this.ForegroundColorBrush = new SolidColorBrush(Color.FromRgb(16, 16, 16));
+                this.AccentColorBrush = new SolidColorBrush(Color.FromRgb(0, 95, 184));
+                this.ButtonContrastColorBrush = Brushes.White;
+            }
+            else
+            {
+                this.BackgroundColorBrush = new SolidColorBrush(Color.FromRgb(32, 32, 32));
+                this.ButtonBackgroundColorBrush = new SolidColorBrush(Color.FromRgb(52, 52, 52));
+                this.SeparatorColorBrush = new SolidColorBrush(Color.FromRgb(48, 48, 48));
+                this.SecondBackgroundColorBrush = new SolidColorBrush(Color.FromRgb(39, 39, 39));
+                this.ForegroundColorBrush = new SolidColorBrush(Color.FromRgb(250, 250, 250));
+                this.AccentColorBrush = new SolidColorBrush(Color.FromRgb(96, 205, 255));
+                this.ButtonContrastColorBrush = Brushes.Black;
 
-            return stream;
+            }
+
+            this.DataContext = this;
         }
 
+        //Click event for canceling the installer
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -88,12 +139,13 @@ namespace SmartInstaller
             btn.Content = "Annuler";
             btn.Click -= btnDownload_Click;
             btn.Click += Button_Click;
+            //Creating temp directory for the download
             string result = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
             Directory.CreateDirectory(result + "\\TempSmartInstaller");
             TempDir = result + "\\TempSmartInstaller\\";
-
             ProgressMessage = "Téléchargement";
             txt.Content = ProgressMessage;
+            //Start download
             WebClient webClient = new WebClient();
             webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
             webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(ProgressChanged);
@@ -110,7 +162,8 @@ namespace SmartInstaller
 
         private async void Completed(object sender, AsyncCompletedEventArgs e)
         {
-            await Task.Delay(500);
+            //Extracting the archive
+            await Task.Delay(100);
             bool b = true;
             ProgressMessage = "Extraction";
             txt.Content = ProgressMessage;
@@ -139,7 +192,7 @@ namespace SmartInstaller
                 await Task.Delay(100);
 
 
-
+                //Installing the app and creating shortcuts and registery keys
                 Directory.CreateDirectory(InstallationPath + "\\" + ApplicationName);
                 DirectoryInfo dir = new DirectoryInfo(InstallationPath + "\\" + ApplicationName);
 
@@ -202,6 +255,8 @@ namespace SmartInstaller
             }
         }
 
+
+        //function that creates registery keys for the uninstaller
         private void UninstallRegistery()
         {
             RegistryKey UninstallKey = Registry.LocalMachine.OpenSubKey("SOFTWARE", true).OpenSubKey("Microsoft", true)
@@ -276,6 +331,7 @@ namespace SmartInstaller
             }
         }
 
+        //Click event for settings button
         private void settingsButton_Click(object sender, RoutedEventArgs e)
         {
             var settings = new SettingsWindow(this);
@@ -286,8 +342,20 @@ namespace SmartInstaller
         {
             DragMove();
         }
+
+
+
+        private static Stream GetStreamFromFile(string filename)
+        {
+            var assembly = typeof(MainWindow).GetTypeInfo().Assembly;
+
+            var stream = assembly.GetManifestResourceStream("SmartInstaller." + filename);
+
+            return stream;
+        }
     }
 
+    //Class of package.json
     class Foo
     {
         public string Name { get; set; }
