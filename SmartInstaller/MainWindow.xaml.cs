@@ -45,8 +45,8 @@ namespace SmartInstaller
         public MainWindow()
         {
             InitializeComponent();
-            //InitializeInstaller("{AppName}", "{PackageUrl}", "{ImageUrl}");
-            InitializeInstaller("Hieroctive", "https://launcher.eclipium.xyz/GamesPackages/Hieroctive.zip", "https://launcher.eclipium.xyz/Images/hieroctiveRounded.png");
+            InitializeInstaller("{AppName}", "{PackageUrl}", "{ImageUrl}");
+            //InitializeInstaller("Hieroctive", "https://launcher.eclipium.xyz/GamesPackages/Hieroctive.zip", "https://launcher.eclipium.xyz/Images/hieroctiveRounded.png");
             InitTheme();
         }
 
@@ -215,6 +215,7 @@ namespace SmartInstaller
                 System.IO.File.Move(TempDir + "package.json", InstallationPath + "\\" + ApplicationName + "\\package.json");
                 System.IO.DirectoryInfo di = new DirectoryInfo(TempDir);
 
+                //Deleting temp files
                 foreach (FileInfo file in di.GetFiles())
                 {
                     file.Delete();
@@ -224,6 +225,7 @@ namespace SmartInstaller
                     dirt.Delete(true);
                 }
                 Directory.Delete(TempDir);
+                //Creating shortcuts
                 if (desktopShortcut) CreateShortcut(ApplicationName, Environment.GetFolderPath(Environment.SpecialFolder.Desktop), InstallationPath + "\\" + ApplicationName + "\\" + f.MainExe);
                 CreateShortcut(ApplicationName, Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), InstallationPath + "\\" + ApplicationName + "\\" + f.MainExe);
                 CreateShortcut(ApplicationName + " Uninstaller", Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), InstallationPath + "\\" + ApplicationName + "\\" + "Remove.exe");

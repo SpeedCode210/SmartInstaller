@@ -103,5 +103,15 @@ namespace SmartInstaller
             ParentWindow.InstallationPath = path.Text;
             this.Close();
         }
+
+        private void shortcutbutton_Click(object sender, RoutedEventArgs e)
+        {
+            desktopShortcut.IsChecked = !desktopShortcut.IsChecked;
+        }
+
+        private void autostartbutton_Click(object sender, RoutedEventArgs e)
+        {
+            autoStart.IsChecked = !autoStart.IsChecked;
+        }
     }
 }

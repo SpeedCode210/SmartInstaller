@@ -144,11 +144,49 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Name="desktopShortcut" IsChecked="True" VerticalAlignment="Center"/>
-                        <Label Foreground="{Binding ForegroundColorBrush}" Content="Créer un raccourci sur le bureau" FontFamily="./#Segoe UI Variable Display" FontSize="15" VerticalAlignment="Center"/>
+                        <Button Click="shortcutbutton_Click" Background="Transparent" Padding="0">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Background" Value="{Binding ButtonBackgroundColorBrush}"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Label Foreground="{Binding ForegroundColorBrush}" Content="Créer un raccourci sur le bureau" FontFamily="./#Segoe UI Variable Display" FontSize="15" VerticalAlignment="Center"/>
+                        </Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Name="autoStart" IsChecked="False" VerticalAlignment="Center"/>
-                        <Label Foreground="{Binding ForegroundColorBrush}" Content="Lancer l'application à la fin de l'installation" FontFamily="./#Segoe UI Variable Display" FontSize="15" VerticalAlignment="Center"/>
+                        <Button Click="autostartbutton_Click" Background="Transparent" Padding="0">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Background" Value="{Binding ButtonBackgroundColorBrush}"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Label Foreground="{Binding ForegroundColorBrush}" Content="Lancer l'application à la fin de l'installation" FontFamily="./#Segoe UI Variable Display" FontSize="15" VerticalAlignment="Center"/>
+                        </Button>
                     </StackPanel>
                 </StackPanel>
                 <Button Name="validate" Content="Valider" FontFamily="./#Segoe UI Variable Display" Click="validate_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Width="184" FontSize="19"  Foreground="{Binding ForegroundColorBrush}" Margin="15">
