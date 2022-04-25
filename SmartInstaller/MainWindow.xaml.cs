@@ -8,12 +8,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.IO.Compression;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using System.Text.Json;
 using IWshRuntimeLibrary;
 using Microsoft.Win32;
 using System.Windows.Media.Imaging;
 using System.Diagnostics;
 using System.Windows.Media;
+using File = System.IO.File;
 
 namespace SmartInstaller
 {
@@ -22,13 +23,12 @@ namespace SmartInstaller
     {
         public string ApplicationName;
         public string ProgressMessage;
-        public string ApplicationUrl;
         private string TempDir;
         private Button btn;
         public int Progress;
         private string ProgramFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
         public string InstallationPath;
-        private Foo f;
+        private ProgramData _programData;
 
         //Brushes that changes with Light or Dark theme
         public Brush BackgroundColorBrush { get; private set; }
@@ -45,22 +45,28 @@ namespace SmartInstaller
         public MainWindow()
         {
             InitializeComponent();
-            InitializeInstaller("{AppName}", "{PackageUrl}", "{ImageUrl}");
-            //InitializeInstaller("Hieroctive", "https://launcher.eclipium.xyz/GamesPackages/Hieroctive.zip", "https://launcher.eclipium.xyz/Images/hieroctiveRounded.png");
+            InitializeInstaller();
             InitTheme();
         }
 
         //Function that initialize the installer
-        private void InitializeInstaller(string AppName, string AppUrl, string ImageUrl)
+        private void InitializeInstaller()
         {
-            ApplicationName = AppName;
+            var assembly = this.GetType().GetTypeInfo().Assembly;
+            var resourceName = "SmartInstaller.package.json";
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName)!)
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                string jsonFile = reader.ReadToEnd();
+                _programData = JsonSerializer.Deserialize<ProgramData>(jsonFile)!;
+            }
+
+            ApplicationName = _programData.Name;
             title.Content = ApplicationName;
             Progress = 0;
-            ProgressMessage = "Appuyez sur \"Installer\"";
+            ProgressMessage = "Click on \"Install\"";
             txt.Content = ProgressMessage;
-            ApplicationUrl = AppUrl;
             InstallationPath = ProgramFiles;
-            Logo.Source = new BitmapImage(new Uri(ImageUrl));
         }
 
         //function that gets windows'default theme (Light theme for windows 8.1 and older)
@@ -122,10 +128,10 @@ namespace SmartInstaller
                 Directory.Delete(TempDir);
             }
             catch { }
-            if (autoStart && (string)btn.Content == "Quitter")
+            if (autoStart && (string)btn.Content == "Quit")
             {
                 System.Diagnostics.Process p = new System.Diagnostics.Process();
-                p.StartInfo.FileName = InstallationPath + "\\" + ApplicationName + "\\" + f.MainExe;
+                p.StartInfo.FileName = InstallationPath + "\\" + ApplicationName + "\\" + _programData.MainExe;
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.RedirectStandardOutput = true;
                 p.Start();
@@ -133,39 +139,34 @@ namespace SmartInstaller
             Application.Current.Shutdown();
         }
 
-        private void btnDownload_Click(object sender, RoutedEventArgs e)
+        private async void btnDownload_Click(object sender, RoutedEventArgs e)
         {
             btn = (Button)sender;
-            btn.Content = "Annuler";
+            btn.Content = "Cancel";
             btn.Click -= btnDownload_Click;
             btn.Click += Button_Click;
             //Creating temp directory for the download
             string result = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
             Directory.CreateDirectory(result + "\\TempSmartInstaller");
             TempDir = result + "\\TempSmartInstaller\\";
-            ProgressMessage = "Téléchargement";
+            ProgressMessage = "Preparing";
             txt.Content = ProgressMessage;
-            //Start download
-            WebClient webClient = new WebClient();
-            webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
-            webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(ProgressChanged);
-            webClient.DownloadFileAsync(new Uri(ApplicationUrl), TempDir + "arch.zip");
-        }
-
-        private void ProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            Progress = e.ProgressPercentage;
+            await Task.Delay(100);
+            //Start extracting
+            //Copy file from resource
+            await File.WriteAllBytesAsync(TempDir + "arch.zip", ReadResource("package.zip"));
+            Progress = 100;
             pb.Value = Progress;
-            ProgressMessage = "Téléchargement " + e.ProgressPercentage + "%";
-            txt.Content = ProgressMessage;
+            Completed();
         }
 
-        private async void Completed(object sender, AsyncCompletedEventArgs e)
+
+        private async void Completed()
         {
             //Extracting the archive
             await Task.Delay(100);
             bool b = true;
-            ProgressMessage = "Extraction";
+            ProgressMessage = "Extracting";
             txt.Content = ProgressMessage;
             await Task.Delay(100);
             try
@@ -184,10 +185,10 @@ namespace SmartInstaller
             if (b)
             {
                 string js = System.IO.File.ReadAllText(TempDir + "package.json");
-                f = JsonConvert.DeserializeObject<Foo>(js);
+                _programData = JsonSerializer.Deserialize<ProgramData>(js);
                 Progress = 150;
                 pb.Value = Progress;
-                ProgressMessage = "Installation";
+                ProgressMessage = "Installing...";
                 txt.Content = ProgressMessage;
                 await Task.Delay(100);
 
@@ -226,13 +227,13 @@ namespace SmartInstaller
                 }
                 Directory.Delete(TempDir);
                 //Creating shortcuts
-                if (desktopShortcut) CreateShortcut(ApplicationName, Environment.GetFolderPath(Environment.SpecialFolder.Desktop), InstallationPath + "\\" + ApplicationName + "\\" + f.MainExe);
-                CreateShortcut(ApplicationName, Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), InstallationPath + "\\" + ApplicationName + "\\" + f.MainExe);
+                if (desktopShortcut) CreateShortcut(ApplicationName, Environment.GetFolderPath(Environment.SpecialFolder.Desktop), InstallationPath + "\\" + ApplicationName + "\\" + _programData.MainExe);
+                CreateShortcut(ApplicationName, Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), InstallationPath + "\\" + ApplicationName + "\\" + _programData.MainExe);
                 CreateShortcut(ApplicationName + " Uninstaller", Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), InstallationPath + "\\" + ApplicationName + "\\" + "Remove.exe");
                 UninstallRegistery();
                 Progress = 200;
                 pb.Value = Progress;
-                ProgressMessage = "Installation terminée";
+                ProgressMessage = "Finished installing";
                 txt.Content = ProgressMessage;
                 btn.Content = "Quitter";
             }
@@ -249,9 +250,7 @@ namespace SmartInstaller
                 catch { }
                 Progress = 0;
                 pb.Value = Progress;
-                ProgressMessage = "Pas d'internet, veuillez réessayer plus tard";
-                txt.Content = ProgressMessage;
-                btn.Content = "installer";
+                btn.Content = "Install";
                 btn.Click -= Button_Click;
                 btn.Click += btnDownload_Click;
             }
@@ -264,10 +263,9 @@ namespace SmartInstaller
             RegistryKey UninstallKey = Registry.LocalMachine.OpenSubKey("SOFTWARE", true).OpenSubKey("Microsoft", true)
                 .OpenSubKey("Windows", true).OpenSubKey("CurrentVersion", true).OpenSubKey("Uninstall", true)
                 .CreateSubKey(ApplicationName, true);
-            UninstallKey.SetValue("DisplayIcon", InstallationPath + "\\" + ApplicationName + "\\" + f.MainExe, RegistryValueKind.String);
+            UninstallKey.SetValue("DisplayIcon", InstallationPath + "\\" + ApplicationName + "\\" + _programData.MainExe, RegistryValueKind.String);
             UninstallKey.SetValue("DisplayName", ApplicationName, RegistryValueKind.String);
-            UninstallKey.SetValue("DisplayVersion", f.VersionName, RegistryValueKind.String);
-            UninstallKey.SetValue("Publisher", "Eclipium", RegistryValueKind.String);
+            UninstallKey.SetValue("DisplayVersion", _programData.VersionName, RegistryValueKind.String);
             UninstallKey.SetValue("UninstallPath", InstallationPath + "\\" + ApplicationName + "\\" + "Remove.exe", RegistryValueKind.String);
             UninstallKey.SetValue("UninstallString", InstallationPath + "\\" + ApplicationName + "\\" + "Remove.exe", RegistryValueKind.String);
             UninstallKey.SetValue("InstallLocation", InstallationPath + "\\" + ApplicationName, RegistryValueKind.String);
@@ -290,7 +288,7 @@ namespace SmartInstaller
 
         public static void CreateShortcut(string shortcutName, string shortcutPath, string targetFileLocation)
         {
-            string shortcutLocation = System.IO.Path.Combine(shortcutPath, shortcutName + ".lnk");
+            string shortcutLocation = Path.Combine(shortcutPath, shortcutName + ".lnk");
             WshShell shell = new WshShell();
             IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
             shortcut.TargetPath = targetFileLocation;
@@ -355,10 +353,27 @@ namespace SmartInstaller
 
             return stream;
         }
+
+        private static byte[] ReadResource(string resourceName)
+        {
+            System.Reflection.Assembly a = typeof(MainWindow).GetTypeInfo().Assembly;
+            ;
+            string fileName = a.GetName().Name + "." + resourceName;
+
+            using (Stream resFilestream = a.GetManifestResourceStream(fileName))
+            {
+                if (resFilestream == null) return null;
+                byte[] ba = new byte[resFilestream.Length];
+                resFilestream.Read(ba, 0, ba.Length);
+                var byteArray = ba;
+                return byteArray;
+            }
+
+        }
     }
 
     //Class of package.json
-    class Foo
+    class ProgramData
     {
         public string Name { get; set; }
         public string MainExe { get; set; }

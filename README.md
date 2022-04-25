@@ -1,56 +1,52 @@
 # SmartInstaller
 
-Un installeur web réalisé sous WPF en C# moderne épuré avec une interface style Windows 11 et simple d'utilisation.
-Il comporte aussi un thème sombre qui s'adapte à celui de windows.
+![Smart Installer](https://raw.githubusercontent.com/eclipium/SmartInstaller/master/smart_installer.png)
 
-![Capture d'écran](https://raw.githubusercontent.com/eclipium/SmartInstaller/master/screen1.png)
 
-![Capture d'écran](https://raw.githubusercontent.com/eclipium/SmartInstaller/master/screen2.png)
+A web installer made under WPF in modern C# with a Windows 11 style interface and easy to use.
+It also includes a dark theme that matches the windows theme.
 
-## Configuration requise pour la compilation
-- .NET Framework 4.8 ou supérieur
+| ![Screenshot - Light](https://raw.githubusercontent.com/eclipium/SmartInstaller/master/SmartInstaller-White.png) | ![ Screenshot - Dark](https://raw.githubusercontent.com/eclipium/SmartInstaller/master/SmartInstaller-Dark.png) |
+|----------------------------------------------------------------------------------------------------------------|--------------------------------------------------------|
+| Light Mode                                                                                                     | Dark Mode                                              |
 
-- Visual studio 2019 ou supérieur
 
-## Configuration requise pour l'utilisateur
-- .NET Framework 4.8 ou supérieur
+## Requirements for the compilation
 
-- Windows 10 ou supérieur
+- .NET SDK 6
 
-## Génération de l'installeur
+## User requirements
 
-Remplacer {AppName} par le nom de l'application, {ImageUrl} par l'url du logo de l'application et {PackageUrl} par l'url du paquet d'installation dans le constructeur de la classe MainWindow (fichier MainWindow.xaml.cs).
+- .NET Desktop Runtime 6
 
-```cs
-public MainWindow()
-{
-  InitializeComponent();
-  InitializeInstaller("{AppName}", "{PackageUrl}", "{ImageUrl}");
-}
-```
+- Windows 7 or later
 
-## Paquet d'installation
+## Generating the installer
 
-Doit être un fichier zip contenant: un dossier bin contenant l'application et un fichier package.json sous cette forme:
+Just replace the package.json data and the installation package
+
+## Installation package
+
+Must be a zip file containing: a bin folder containing the application and a package.json file in this form:
 
 ```json
 {
-  "Name": "{NomDeApplication}",
-  "MainExe": "{NomDeExecutable(exemple: app.exe)}",
-  "VersionName": "{NomDeVersion}",
-  "VersionCode": {NumeroDeVersion}, 
-  "Date": "{DateDePublication}"
+  "Name": "{ApplicationName}",
+  "MainExe": "{ExecutableName(exemple: app.exe)}",
+  "VersionName": "{VersionName}",
+  "VersionCode": {VersionCode}, 
+  "Date": "{PublicationDate}"
 }
 ```
 
-## Exemple :
+## Example :
 
 ```json
 {
-  "Name": "Hieroctive",
-  "MainExe": "Hieroctive.exe",
-  "VersionName": "1.2",
-  "VersionCode": 3, 
-  "Date": "02/07/2021"
+  "Name": "TetraSwap",
+  "MainExe": "TetraSwap.exe",
+  "VersionName": "1.3",
+  "VersionCode": 10, 
+  "Date": "25/04/2022"
 }
 ```
