@@ -68,17 +68,17 @@
                         <DropShadowEffect BlurRadius="6" ShadowDepth="0" Opacity="0.4" Direction="225" />
                     </Image.Effect>
                 </Image>
-                <Label Foreground="{Binding ForegroundColorBrush}" Content="Installation program of" FontFamily="./#Segoe UI Variable Display" FontSize="26" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="330,0,0,120" />
-                <Label Foreground="{Binding ForegroundColorBrush}" x:Name="title" Content="ApplicationName"  VerticalAlignment="Center" HorizontalAlignment="Left"  FontSize="50" Margin="330,0,0,20"  />
+                <Label Foreground="{Binding ForegroundColorBrush}" Content="Installation program of" FontFamily="./#Segoe UI Variable Display" FontSize="26" FontWeight="Normal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="330,116,0,0" />
+                <Label Foreground="{Binding ForegroundColorBrush}" x:Name="title" Content="ApplicationName"  VerticalAlignment="Top" HorizontalAlignment="Left"  FontSize="50" Margin="330,144,0,0"  />
                 <Rectangle Fill="{Binding SeparatorColorBrush}" Margin="0,0,0,125" Height="1" VerticalAlignment="Bottom" />
                 <Border Background="{Binding SecondBackgroundColorBrush}" BorderThickness="0" BorderBrush="Transparent" CornerRadius="0,0,8,8" VerticalAlignment="Bottom" Height="125">
                     <Grid>
                         <Label x:Name="txt" FontFamily="./#Segoe UI Variable Display" Content="Click on &quot;Install&quot;" Foreground="{Binding ForegroundColorBrush}" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" FontSize="16" FontWeight="Normal" Margin="0,0,0,80" />
                         <ProgressBar x:Name="pb" Width="700" Height="10" Minimum="0" Maximum="200" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,65" />
-                        <Button Content="Install" FontFamily="./#Segoe UI Variable Display" Click="btnDownload_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Width="184" FontSize="19"  Foreground="{Binding ForegroundColorBrush}" Margin="10">
+                        <Button Content="Install" FontFamily="./#Segoe UI Variable Display" Click="btnDownload_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Width="184" FontSize="19"  Foreground="{Binding ButtonContrastColorBrush}" Margin="10">
                             <Button.Style>
                                 <Style TargetType="{x:Type Button}">
-                                    <Setter Property="Background" Value="{Binding ButtonBackgroundColorBrush}"/>
+                                    <Setter Property="Background" Value="{Binding AccentColorBrush}"/>
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type Button}">
@@ -93,16 +93,16 @@
                                     </Setter>
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="{Binding SeparatorColorBrush}"/>
+                                            <Setter Property="Opacity" Value="0.9"/>
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>
                         </Button>
-                        <Button Name="settingsButton" Click="settingsButton_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Width="40" FontSize="19"  Foreground="{Binding ButtonContrastColorBrush}" Margin="0,0,240,10">
+                        <Button Name="settingsButton" Click="settingsButton_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Width="40" FontSize="19" Foreground="{Binding ForegroundColorBrush}" Margin="0,0,240,10">
                             <Button.Style>
                                 <Style TargetType="{x:Type Button}">
-                                    <Setter Property="Background" Value="{Binding AccentColorBrush}"/>
+                                    <Setter Property="Background" Value="{Binding ButtonBackgroundColorBrush}"/>
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type Button}">
@@ -117,7 +117,7 @@
                                     </Setter>
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Opacity" Value="0.9"/>
+                                            <Setter Property="Background" Value="{Binding SeparatorColorBrush}"/>
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
@@ -127,6 +127,7 @@
                         </Button>
                     </Grid>
                 </Border>
+                <Label Name="version" Foreground="{Binding ForegroundColorBrush}" Content="Version 1.0" FontFamily="./#Segoe UI Variable Display" FontSize="20" FontWeight="Normal" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,206,0,0" />
             </Grid>
         </Border>
     </Grid>

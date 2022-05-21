@@ -63,6 +63,7 @@ namespace SmartInstaller
 
             ApplicationName = _programData.Name;
             title.Content = ApplicationName;
+            version.Content = "Version " + _programData.VersionName;
             Progress = 0;
             ProgressMessage = "Click on \"Install\"";
             txt.Content = ProgressMessage;
