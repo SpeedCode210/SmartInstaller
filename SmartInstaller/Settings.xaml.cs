@@ -30,48 +30,16 @@ namespace SmartInstaller
             InitTheme();
         }
 
-        //function that gets windows'default theme (Light theme for windows 8.1 and older)
+        //function that gets windows'default theme from parent
         private void InitTheme()
         {
-            bool AppsUseLightTheme = true;
-            try
-            {
-                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize"))
-                {
-                    if (key != null && key.GetValue("AppsUseLightTheme") != null)
-                    {
-                        Int64 value = Convert.ToInt64(key.GetValue("AppsUseLightTheme").ToString());
-                        if (value == 0)
-                            AppsUseLightTheme = false;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Exception: " + ex.Message);
-            }
-
-            if (AppsUseLightTheme)
-            {
-                this.BackgroundColorBrush = new SolidColorBrush(Color.FromRgb(249, 249, 249));
-                this.ButtonBackgroundColorBrush = new SolidColorBrush(Color.FromRgb(249, 249, 249));
-                this.SeparatorColorBrush = new SolidColorBrush(Color.FromRgb(229, 229, 229));
-                this.SecondBackgroundColorBrush = new SolidColorBrush(Color.FromRgb(238, 238, 238));
-                this.ForegroundColorBrush = new SolidColorBrush(Color.FromRgb(16, 16, 16));
-                this.AccentColorBrush = new SolidColorBrush(Color.FromRgb(0, 95, 184));
-                this.ButtonContrastColorBrush = Brushes.White;
-            }
-            else
-            {
-                this.BackgroundColorBrush = new SolidColorBrush(Color.FromRgb(32, 32, 32));
-                this.ButtonBackgroundColorBrush = new SolidColorBrush(Color.FromRgb(52, 52, 52));
-                this.SeparatorColorBrush = new SolidColorBrush(Color.FromRgb(48, 48, 48));
-                this.SecondBackgroundColorBrush = new SolidColorBrush(Color.FromRgb(39, 39, 39));
-                this.ForegroundColorBrush = new SolidColorBrush(Color.FromRgb(250, 250, 250));
-                this.AccentColorBrush = new SolidColorBrush(Color.FromRgb(96, 205, 255));
-                this.ButtonContrastColorBrush = Brushes.Black;
-
-            }
+            this.BackgroundColorBrush = ParentWindow.BackgroundColorBrush;
+            this.ButtonBackgroundColorBrush = ParentWindow.ButtonBackgroundColorBrush;
+            this.SeparatorColorBrush = ParentWindow.SeparatorColorBrush;
+            this.SecondBackgroundColorBrush = ParentWindow.SecondBackgroundColorBrush;
+            this.ForegroundColorBrush = ParentWindow.ForegroundColorBrush;
+            this.ButtonContrastColorBrush = ParentWindow.ButtonContrastColorBrush;
+            this.AccentColorBrush = ParentWindow.AccentColorBrush;
 
             this.DataContext = this;
         }

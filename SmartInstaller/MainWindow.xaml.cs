@@ -22,13 +22,16 @@ namespace SmartInstaller
     public partial class MainWindow : Window
     {
         public string ApplicationName;
-        public string ProgressMessage;
         private string TempDir;
-        private Button btn;
         public int Progress;
-        private string ProgramFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-        public string InstallationPath;
         private ProgramData _programData;
+        private static string ProgramFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+
+        //Change this line to change default installation path
+        public string InstallationPath = ProgramFiles;
+
+        //Change this line to change installer theme
+        public Theme Theme = Theme.Auto;
 
         //Brushes that changes with Light or Dark theme
         public Brush BackgroundColorBrush { get; private set; }
@@ -65,40 +68,51 @@ namespace SmartInstaller
             title.Content = ApplicationName;
             version.Content = "Version " + _programData.VersionName;
             Progress = 0;
-            ProgressMessage = "Click on \"Install\"";
-            txt.Content = ProgressMessage;
-            InstallationPath = ProgramFiles;
+            txt.Content = "Click on \"Install\"";
+
+            //check if program is installed
+            if(File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu) + "\\" + ApplicationName + ".lnk"))
+            {
+                btnDownload.Content = "Update";
+                txt.Content = "Click on \"Update\"";
+            }
         }
 
         //function that gets windows'default theme (Light theme for windows 8.1 and older)
         private void InitTheme()
         {
-            bool AppsUseLightTheme = true;
-            try
+            bool AppsUseLightTheme = Theme is not Theme.Dark;
+            
+            if(Theme is Theme.Auto)
             {
-                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize"))
+                try
                 {
-                    if (key != null && key.GetValue("AppsUseLightTheme") != null)
+                    using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize"))
                     {
-                        Int64 value = Convert.ToInt64(key.GetValue("AppsUseLightTheme").ToString());
-                        if (value == 0)
-                            AppsUseLightTheme = false;
+                        if (key != null && key.GetValue("AppsUseLightTheme") != null)
+                        {
+                            Int64 value = Convert.ToInt64(key.GetValue("AppsUseLightTheme").ToString());
+                            if (value == 0)
+                                AppsUseLightTheme = false;
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Exception: " + ex.Message);
+                }
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Exception: " + ex.Message);
-            }
+
+            this.AccentColorBrush = GetAccentColor(AppsUseLightTheme);
 
             if (AppsUseLightTheme)
             {
+              
                 this.BackgroundColorBrush = new SolidColorBrush(Color.FromRgb(249, 249, 249));
                 this.ButtonBackgroundColorBrush = new SolidColorBrush(Color.FromRgb(249, 249, 249));
                 this.SeparatorColorBrush = new SolidColorBrush(Color.FromRgb(229, 229, 229));
                 this.SecondBackgroundColorBrush = new SolidColorBrush(Color.FromRgb(238, 238, 238));
                 this.ForegroundColorBrush = new SolidColorBrush(Color.FromRgb(16, 16, 16));
-                this.AccentColorBrush = new SolidColorBrush(Color.FromRgb(0, 95, 184));
                 this.ButtonContrastColorBrush = Brushes.White;
             }
             else
@@ -108,12 +122,39 @@ namespace SmartInstaller
                 this.SeparatorColorBrush = new SolidColorBrush(Color.FromRgb(48, 48, 48));
                 this.SecondBackgroundColorBrush = new SolidColorBrush(Color.FromRgb(39, 39, 39));
                 this.ForegroundColorBrush = new SolidColorBrush(Color.FromRgb(250, 250, 250));
-                this.AccentColorBrush = new SolidColorBrush(Color.FromRgb(96, 205, 255));
                 this.ButtonContrastColorBrush = Brushes.Black;
 
             }
 
             this.DataContext = this;
+        }
+
+        private static Brush GetAccentColor(bool light)
+        {
+            System.Drawing.Color systemAccent = System.Drawing.Color.FromArgb(255, SystemParameters.WindowGlassColor.R, SystemParameters.WindowGlassColor.G, SystemParameters.WindowGlassColor.B);
+
+            if (light)
+            {
+                if (systemAccent.GetBrightness() <= 0.5)
+                    return SystemParameters.WindowGlassBrush;
+                else
+                {
+                    var color = new HslColor(SystemParameters.WindowGlassColor);
+                    var color2 = new HslColor(color.h, color.s, 0.45f, color.a);
+                    return new SolidColorBrush(color2.ToRgb());
+                }
+            }
+            else
+            {
+                if (systemAccent.GetBrightness() >= 0.5)
+                    return SystemParameters.WindowGlassBrush;
+                else
+                {
+                    var color = new HslColor(SystemParameters.WindowGlassColor);
+                    var color2 = new HslColor(color.h, color.s, 0.65f, color.a);
+                    return new SolidColorBrush(color2.ToRgb());
+                }
+            }
         }
 
         //Click event for canceling the installer
@@ -129,7 +170,7 @@ namespace SmartInstaller
                 Directory.Delete(TempDir);
             }
             catch { }
-            if (autoStart && (string)btn.Content == "Quit")
+            if (autoStart && (string)btnDownload.Content == "Quit")
             {
                 System.Diagnostics.Process p = new System.Diagnostics.Process();
                 p.StartInfo.FileName = InstallationPath + "\\" + ApplicationName + "\\" + _programData.MainExe;
@@ -142,16 +183,14 @@ namespace SmartInstaller
 
         private async void btnDownload_Click(object sender, RoutedEventArgs e)
         {
-            btn = (Button)sender;
-            btn.Content = "Cancel";
-            btn.Click -= btnDownload_Click;
-            btn.Click += Button_Click;
+            btnDownload.Content = "Cancel";
+            btnDownload.Click -= btnDownload_Click;
+            btnDownload.Click += Button_Click;
             //Creating temp directory for the download
             string result = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
             Directory.CreateDirectory(result + "\\TempSmartInstaller");
             TempDir = result + "\\TempSmartInstaller\\";
-            ProgressMessage = "Preparing";
-            txt.Content = ProgressMessage;
+            txt.Content = "Preparing";
             await Task.Delay(100);
             //Start extracting
             //Copy file from resource
@@ -167,8 +206,7 @@ namespace SmartInstaller
             //Extracting the archive
             await Task.Delay(100);
             bool b = true;
-            ProgressMessage = "Extracting";
-            txt.Content = ProgressMessage;
+            txt.Content = "Extracting";
             await Task.Delay(100);
             try
             {
@@ -189,8 +227,7 @@ namespace SmartInstaller
                 _programData = JsonSerializer.Deserialize<ProgramData>(js);
                 Progress = 150;
                 pb.Value = Progress;
-                ProgressMessage = "Installing...";
-                txt.Content = ProgressMessage;
+                txt.Content = "Installing...";
                 await Task.Delay(100);
 
 
@@ -234,9 +271,8 @@ namespace SmartInstaller
                 UninstallRegistery();
                 Progress = 200;
                 pb.Value = Progress;
-                ProgressMessage = "Finished installing";
-                txt.Content = ProgressMessage;
-                btn.Content = "Quitter";
+                txt.Content = "Finished installing";
+                btnDownload.Content = "Quitter";
             }
             else
             {
@@ -251,9 +287,13 @@ namespace SmartInstaller
                 catch { }
                 Progress = 0;
                 pb.Value = Progress;
-                btn.Content = "Install";
-                btn.Click -= Button_Click;
-                btn.Click += btnDownload_Click;
+                btnDownload.Content = "Install";
+                if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu) + "\\" + ApplicationName + ".lnk"))
+                {
+                    btnDownload.Content = "Update";
+                }
+                btnDownload.Click -= Button_Click;
+                btnDownload.Click += btnDownload_Click;
             }
         }
 

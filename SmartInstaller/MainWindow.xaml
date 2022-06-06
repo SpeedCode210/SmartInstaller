@@ -73,9 +73,9 @@
                 <Rectangle Fill="{Binding SeparatorColorBrush}" Margin="0,0,0,125" Height="1" VerticalAlignment="Bottom" />
                 <Border Background="{Binding SecondBackgroundColorBrush}" BorderThickness="0" BorderBrush="Transparent" CornerRadius="0,0,8,8" VerticalAlignment="Bottom" Height="125">
                     <Grid>
-                        <Label x:Name="txt" FontFamily="./#Segoe UI Variable Display" Content="Click on &quot;Install&quot;" Foreground="{Binding ForegroundColorBrush}" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" FontSize="16" FontWeight="Normal" Margin="0,0,0,80" />
+                        <Label x:Name="txt" FontFamily="./#Segoe UI Variable Display" Content="" Foreground="{Binding ForegroundColorBrush}" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" FontSize="16" FontWeight="Normal" Margin="0,0,0,80" />
                         <ProgressBar x:Name="pb" Width="700" Height="10" Minimum="0" Maximum="200" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,65" />
-                        <Button Content="Install" FontFamily="./#Segoe UI Variable Display" Click="btnDownload_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Width="184" FontSize="19"  Foreground="{Binding ButtonContrastColorBrush}" Margin="10">
+                        <Button x:Name="btnDownload"  Content="Install" FontFamily="./#Segoe UI Variable Display" Click="btnDownload_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Width="184" FontSize="19"  Foreground="{Binding ButtonContrastColorBrush}" Margin="10">
                             <Button.Style>
                                 <Style TargetType="{x:Type Button}">
                                     <Setter Property="Background" Value="{Binding AccentColorBrush}"/>
