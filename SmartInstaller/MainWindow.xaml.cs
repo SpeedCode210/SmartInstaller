@@ -272,7 +272,7 @@ namespace SmartInstaller
                 Progress = 200;
                 pb.Value = Progress;
                 txt.Content = "Finished installing";
-                btnDownload.Content = "Quitter";
+                btnDownload.Content = "Quit";
             }
             else
             {
