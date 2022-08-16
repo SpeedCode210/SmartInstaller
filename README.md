@@ -3,7 +3,7 @@
 ![Smart Installer](https://raw.githubusercontent.com/eclipium/SmartInstaller/master/smart_installer.png)
 
 
-A web installer made under WPF in modern C# with a Windows 11 style interface and easy to use.
+A software installer made under WPF in modern C# with a Windows 11 style interface and easy to use.
 It also includes a dark theme that matches the windows theme.
 
 | ![Screenshot - Light](https://raw.githubusercontent.com/eclipium/SmartInstaller/master/SmartInstaller-White.png) | ![ Screenshot - Dark](https://raw.githubusercontent.com/eclipium/SmartInstaller/master/SmartInstaller-Dark.png) |
