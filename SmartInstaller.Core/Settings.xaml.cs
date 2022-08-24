@@ -24,13 +24,15 @@ namespace SmartInstaller
         {
             InitializeComponent();
             this.ParentWindow = parent;
+            FlowDirection = ParentWindow.FlowDirection;
             desktopShortcut.IsChecked = parent.desktopShortcut;
             autoStart.IsChecked = parent.autoStart;
             path.Text = parent.InstallationPath;
+            addToPath.IsChecked = parent.AddToPath;
             InitTheme();
         }
 
-        //function that gets windows'default theme from parent
+        //function that gets windows's default theme from parent
         private void InitTheme()
         {
             this.BackgroundColorBrush = ParentWindow.BackgroundColorBrush;
@@ -58,7 +60,7 @@ namespace SmartInstaller
         private void pathButton_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
-            if ((bool)dialog.ShowDialog())
+            if ((bool)dialog.ShowDialog()!)
             {
                 path.Text = dialog.SelectedPath;
             }
@@ -66,9 +68,10 @@ namespace SmartInstaller
 
         private void validate_Click(object sender, RoutedEventArgs e)
         {
-            ParentWindow.desktopShortcut = (bool)desktopShortcut.IsChecked;
-            ParentWindow.autoStart = (bool)autoStart.IsChecked;
+            ParentWindow.desktopShortcut = (bool)desktopShortcut.IsChecked!;
+            ParentWindow.autoStart = (bool)autoStart.IsChecked!;
             ParentWindow.InstallationPath = path.Text;
+            ParentWindow.AddToPath = (bool)addToPath.IsChecked!;
             this.Close();
         }
 
@@ -80,6 +83,11 @@ namespace SmartInstaller
         private void autostartbutton_Click(object sender, RoutedEventArgs e)
         {
             autoStart.IsChecked = !autoStart.IsChecked;
+        }
+
+        private void addtopathbutton_Click(object sender, RoutedEventArgs e)
+        {
+            addToPath.IsChecked = !addToPath.IsChecked;
         }
     }
 }

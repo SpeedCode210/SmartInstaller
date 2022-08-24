@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.1.32414.318
+VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartInstaller", "SmartInstaller\SmartInstaller.csproj", "{EC7E2207-4153-4B0F-91BE-B87FA4EBB759}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SmartInstaller.Core", "SmartInstaller.Core\SmartInstaller.Core.shproj", "{6B6119A4-064D-4880-AF15-F112A08B6E5A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartInstaller.NetCore", "SmartInstaller.NetCore\SmartInstaller.NetCore.csproj", "{510E3306-4901-4D70-BC11-ACEED727F3C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartInstaller.NetFx", "SmartInstaller.NetFx\SmartInstaller.NetFx.csproj", "{10D3CD9A-0133-40C4-B548-0EADDA68BB0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +15,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EC7E2207-4153-4B0F-91BE-B87FA4EBB759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EC7E2207-4153-4B0F-91BE-B87FA4EBB759}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EC7E2207-4153-4B0F-91BE-B87FA4EBB759}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EC7E2207-4153-4B0F-91BE-B87FA4EBB759}.Release|Any CPU.Build.0 = Release|Any CPU
+		{510E3306-4901-4D70-BC11-ACEED727F3C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{510E3306-4901-4D70-BC11-ACEED727F3C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{510E3306-4901-4D70-BC11-ACEED727F3C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{510E3306-4901-4D70-BC11-ACEED727F3C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10D3CD9A-0133-40C4-B548-0EADDA68BB0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10D3CD9A-0133-40C4-B548-0EADDA68BB0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {A3B584E9-855E-4917-AB5C-F1393FA884E0}
+		SolutionGuid = {9401DB0D-28F0-4CDC-986D-A40FDF71762B}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		SmartInstaller.Core\SmartInstaller.Core.projitems*{10d3cd9a-0133-40c4-b548-0eadda68bb0d}*SharedItemsImports = 4
+		SmartInstaller.Core\SmartInstaller.Core.projitems*{510e3306-4901-4d70-bc11-aceed727f3c9}*SharedItemsImports = 5
+		SmartInstaller.Core\SmartInstaller.Core.projitems*{6b6119a4-064d-4880-af15-f112a08b6e5a}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

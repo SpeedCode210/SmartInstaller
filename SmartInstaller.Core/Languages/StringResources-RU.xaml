@@ -1,0 +1,23 @@
+﻿<ResourceDictionary 
+        xmlns ="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="install">Установить</system:String>
+    <system:String x:Key="installation-of"> </system:String>
+    <system:String x:Key="click-on-install">Нажмите на "Установить"</system:String>
+    <system:String x:Key="submit">Подтвердите</system:String>
+    <system:String x:Key="add-to-path">Добавить в PATH</system:String>
+    <system:String x:Key="installation-settings">Параметры установки</system:String>
+    <system:String x:Key="install-path">Папка установки</system:String>
+    <system:String x:Key="create-shortcut">Создать ярлык на рабочем столе</system:String>
+    <system:String x:Key="run-on-finish">Запустить приложение по завершении</system:String>
+    <system:String x:Key="finished">Завершение установки</system:String>
+    <system:String x:Key="preparing">Подготовка</system:String>
+    <system:String x:Key="quit">Выйдите из</system:String>
+    <system:String x:Key="update">Обновить</system:String>
+    <system:String x:Key="click-on-update">Нажмите на "Обновить"</system:String>
+    <system:String x:Key="cancel">Отменить</system:String>
+    <system:String x:Key="extracting">Распаковка файлов</system:String>
+    <system:String x:Key="installing">Установка...</system:String>
+</ResourceDictionary> 

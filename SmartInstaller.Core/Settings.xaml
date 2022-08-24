@@ -5,82 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmartInstaller"
         mc:Ignorable="d"
-        Title="Paramètres de l'installation" Height="250" Width="500" WindowStyle="None" Background="Transparent" AllowsTransparency="True" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
-    <Window.Resources>
-        <Style TargetType="{x:Type CheckBox}">
-            <Setter Property="OverridesDefaultStyle"
-          Value="True" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type CheckBox}">
-                        <StackPanel Orientation="Horizontal">
-                            <Border Background="Transparent" x:Name="border" CornerRadius="4" Margin="5" Height="18" Width="18" BorderBrush="#8B8B8B" BorderThickness="1" >
-                                <TextBlock Foreground="Transparent" x:Name="checkText" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="./#Segoe Fluent Icons" FontSize="13" TextOptions.TextRenderingMode="Grayscale" Height="13" Width="20" ><Run Text=" "/><Run Text="&#xE73E;"/></TextBlock>
-                            </Border>
-                        </StackPanel>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="checkText" Property="Foreground" Value="{Binding ButtonContrastColorBrush}"/>
-                                <Setter TargetName="border" Property="Background" Value="{Binding AccentColorBrush}"/>
-                                <Setter TargetName="border" Property="BorderBrush" Value="Transparent"/>
-                                <Setter TargetName="border" Property="Height" Value="20"/>
-                                <Setter TargetName="border" Property="Width" Value="20"/>
-                                <Setter TargetName="border" Property="Margin" Value="4"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style TargetType="{x:Type TextBox}">
-            <Setter Property="OverridesDefaultStyle"
-          Value="True" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TextBoxBase}">
-                        <Grid>
-                            <Border Background="{Binding ButtonBackgroundColorBrush}" Margin="5" Height="25" BorderThickness="0" CornerRadius="4">
-                                <Border.Effect>
-                                    <DropShadowEffect BlurRadius="4" ShadowDepth="0" Opacity="0.3" Direction="225" />
-                                </Border.Effect>
-                                <VisualStateManager.VisualStateGroups>
-                                    <VisualStateGroup x:Name="CommonStates">
-                                        <VisualState x:Name="Normal" />
-                                        <VisualState x:Name="Disabled">
-                                            <Storyboard>
-                                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
-                                                Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                                    <EasingColorKeyFrame KeyTime="0"
-                                         Value="#eeeeee" />
-                                                </ColorAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="ReadOnly">
-                                            <Storyboard>
-                                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
-                                                Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                                    <EasingColorKeyFrame KeyTime="0"
-                                         Value="#303030" />
-                                                </ColorAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="MouseOver" />
-                                    </VisualStateGroup>
-                                </VisualStateManager.VisualStateGroups>
-                                <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
-                            </Border>
-                            <Border Background="{Binding AccentColorBrush}" Height="2" Margin="5,0,5,5" VerticalAlignment="Bottom" CornerRadius="0,0,5,5"/>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="Validation.HasError" Value="true">
-                    <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
+        Title="{DynamicResource installation-settings}" Height="300"
+        Width="500" WindowStyle="None" Background="Transparent" 
+        AllowsTransparency="True" WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
     <Grid>
         <Border Background="{Binding BackgroundColorBrush}" BorderThickness="0" Margin="18" BorderBrush="Transparent" CornerRadius="8,8,8,8" MouseLeftButtonDown="Border_MouseLeftButtonDown">
             <Border.Effect>
@@ -109,12 +37,14 @@
                             </Style.Triggers>
                         </Style>
                     </Button.Style>
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="./#Segoe Fluent Icons" FontSize="15" TextOptions.TextRenderingMode="Grayscale" Height="16" Width="24"><Run Text=" "/><Run Text="&#xEDAE;"/></TextBlock>
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontFamily="./#Segoe Fluent Icons" FontSize="15">
+                        <Run Text="&#xEDAE;"/>
+                    </TextBlock>
                 </Button>
-                <Label Foreground="{Binding ForegroundColorBrush}" Content="Installation settings" FontFamily="./#Segoe UI Variable Small Light" VerticalContentAlignment="Center" FontWeight="DemiBold" FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                <StackPanel Margin="10" VerticalAlignment="Bottom" Height="170">
+                <Label Foreground="{Binding ForegroundColorBrush}" Content="{DynamicResource installation-settings}" FontFamily="./#Segoe UI Variable Small Light" VerticalContentAlignment="Center" FontWeight="DemiBold" FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <StackPanel Margin="10,50,10,10" VerticalAlignment="Top" Height="170">
                     <StackPanel Orientation="Horizontal">
-                        <Label Foreground="{Binding ForegroundColorBrush}" Content="Install path" FontFamily="./#Segoe UI Variable Display" FontSize="15" VerticalAlignment="Center"/>
+                        <Label Foreground="{Binding ForegroundColorBrush}" Content="{DynamicResource install-path}" FontFamily="./#Segoe UI Variable Display" FontSize="15" VerticalAlignment="Center"/>
                         <TextBox Foreground="{Binding ForegroundColorBrush}" Name="path" FontFamily="./#Segoe UI Variable Display" Width="250" VerticalContentAlignment="Center"/>
                         <Button Name="pathButton" Click="pathButton_Click" HorizontalAlignment="Center" VerticalAlignment="Top" Height="25" Width="25"  Foreground="{Binding ForegroundColorBrush}" Margin="5">
                             <Button.Style>
@@ -139,7 +69,7 @@
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="./#Segoe Fluent Icons" FontSize="22" TextOptions.TextRenderingMode="Grayscale" Height="22" Width="35"><Run Text=" "/><Run Text="&#xE712;"/></TextBlock>
+                            <TextBlock VerticalAlignment="Center" TextAlignment="Center" HorizontalAlignment="Center" FontFamily="./#Segoe Fluent Icons" FontSize="22"><Run Text="&#xE712;"/></TextBlock>
                         </Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
@@ -162,7 +92,7 @@
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>
-                            <Label Foreground="{Binding ForegroundColorBrush}" Content="Create desktop shortcut" FontFamily="./#Segoe UI Variable Display" FontSize="15" VerticalAlignment="Center"/>
+                            <Label Foreground="{Binding ForegroundColorBrush}" Content="{DynamicResource create-shortcut}" FontFamily="./#Segoe UI Variable Display" FontSize="15" VerticalAlignment="Center"/>
                         </Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
@@ -185,11 +115,34 @@
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>
-                            <Label Foreground="{Binding ForegroundColorBrush}" Content="Run app on finish" FontFamily="./#Segoe UI Variable Display" FontSize="15" VerticalAlignment="Center"/>
+                            <Label Foreground="{Binding ForegroundColorBrush}" Content="{DynamicResource run-on-finish}" FontFamily="./#Segoe UI Variable Display" FontSize="15" VerticalAlignment="Center"/>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Name="addToPath" IsChecked="False" VerticalAlignment="Center"/>
+                        <Button Click="addtopathbutton_Click" Background="Transparent" Padding="0">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Background" Value="{Binding ButtonBackgroundColorBrush}"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Label Foreground="{Binding ForegroundColorBrush}" Content="{DynamicResource add-to-path}" FontFamily="./#Segoe UI Variable Display" FontSize="15" VerticalAlignment="Center"/>
                         </Button>
                     </StackPanel>
                 </StackPanel>
-                <Button Name="validate" Content="Submit" FontFamily="./#Segoe UI Variable Display" Click="validate_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Width="184" FontSize="19"  Foreground="{Binding ForegroundColorBrush}" Margin="15">
+                <Button Name="validate" Content="{DynamicResource submit}" FontFamily="./#Segoe UI Variable Display" Click="validate_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Width="184" FontSize="19"  Foreground="{Binding ForegroundColorBrush}" Margin="15">
                     <Button.Style>
                         <Style TargetType="{x:Type Button}">
                             <Setter Property="Background" Value="{Binding ButtonBackgroundColorBrush}"/>

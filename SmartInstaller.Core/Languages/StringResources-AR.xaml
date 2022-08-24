@@ -1,0 +1,23 @@
+﻿<ResourceDictionary 
+        xmlns ="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="install">تثبيت</system:String>
+    <system:String x:Key="installation-of">برنامج تثبيت</system:String>
+    <system:String x:Key="click-on-install">انقر فوق «تثبيت»</system:String>
+    <system:String x:Key="submit">تسجيل</system:String>
+    <system:String x:Key="add-to-path">أضف إلى PATH</system:String>
+    <system:String x:Key="installation-settings">إعدادات التثبيت</system:String>
+    <system:String x:Key="install-path">مجلد التثبيت</system:String>
+    <system:String x:Key="create-shortcut">إنشاء اختصار سطح المكتب</system:String>
+    <system:String x:Key="run-on-finish">تشغيل التطبيق عند الانتهاء</system:String>
+    <system:String x:Key="finished">تم الانتهاء من التثبيت</system:String>
+    <system:String x:Key="preparing">...تحضير</system:String>
+    <system:String x:Key="quit">إغلاق</system:String>
+    <system:String x:Key="update">تحديث</system:String>
+    <system:String x:Key="click-on-update">انقر فوق «تحديث»</system:String>
+    <system:String x:Key="cancel">الغاء</system:String>
+    <system:String x:Key="extracting">استخراج الملفات</system:String>
+    <system:String x:Key="installing">...جارٍ التثبيت</system:String>
+</ResourceDictionary> 

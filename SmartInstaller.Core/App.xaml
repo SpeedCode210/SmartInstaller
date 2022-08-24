@@ -1,0 +1,99 @@
+﻿<Application x:Class="SmartInstaller.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:SmartInstaller"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <Style TargetType="{x:Type ProgressBar}">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ProgressBar">
+                        <Border  BorderThickness="0" Background="{Binding ButtonBackgroundColorBrush}" CornerRadius="5" Padding="0">
+
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5" ShadowDepth="0" Opacity="0.3" Direction="225" />
+                            </Border.Effect>
+                            <Grid x:Name="PART_Track">
+                                <Border x:Name="PART_Indicator" HorizontalAlignment="Left" BorderThickness="0" Background="{Binding AccentColorBrush}" CornerRadius="5" Padding="0">
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type CheckBox}">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Background="Transparent" x:Name="border" CornerRadius="4" Margin="5" Height="18" Width="18" BorderBrush="#8B8B8B" BorderThickness="1" >
+                                <TextBlock Foreground="Transparent" x:Name="checkText" VerticalAlignment="Center" TextAlignment="Center" HorizontalAlignment="Center" FontFamily="./#Segoe Fluent Icons" FontSize="13"><Run Text="&#xE73E;"/></TextBlock>
+                            </Border>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="checkText" Property="Foreground" Value="{Binding ButtonContrastColorBrush}"/>
+                                <Setter TargetName="border" Property="Background" Value="{Binding AccentColorBrush}"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="Transparent"/>
+                                <Setter TargetName="border" Property="Height" Value="20"/>
+                                <Setter TargetName="border" Property="Width" Value="20"/>
+                                <Setter TargetName="border" Property="Margin" Value="4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="OverridesDefaultStyle"
+          Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBoxBase}">
+                        <Grid>
+                            <Border Background="{Binding ButtonBackgroundColorBrush}" Margin="5" Height="25" BorderThickness="0" CornerRadius="4">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="4" ShadowDepth="0" Opacity="0.3" Direction="225" />
+                                </Border.Effect>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                                    <EasingColorKeyFrame KeyTime="0"
+                                         Value="#eeeeee" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="ReadOnly">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                                    <EasingColorKeyFrame KeyTime="0"
+                                         Value="#303030" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="MouseOver" />
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
+                            </Border>
+                            <Border Background="{Binding AccentColorBrush}" Height="2" Margin="5,0,5,5" VerticalAlignment="Bottom" CornerRadius="0,0,5,5"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Application.Resources>
+</Application>

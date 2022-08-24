@@ -1,0 +1,23 @@
+﻿<ResourceDictionary 
+        xmlns ="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="install">Instalar</system:String>
+    <system:String x:Key="installation-of">Programa de instalação de</system:String>
+    <system:String x:Key="click-on-install">Clique em "Instalar"</system:String>
+    <system:String x:Key="submit">Confirme</system:String>
+    <system:String x:Key="add-to-path">Acrescentar ao PATH</system:String>
+    <system:String x:Key="installation-settings">Definições de instalação</system:String>
+    <system:String x:Key="install-path">Pasta de instalação</system:String>
+    <system:String x:Key="create-shortcut">Criar atalho no ambiente de trabalho</system:String>
+    <system:String x:Key="run-on-finish">Executar aplicação no final</system:String>
+    <system:String x:Key="finished">Acabada a instalação</system:String>
+    <system:String x:Key="preparing">Preparação</system:String>
+    <system:String x:Key="quit">Desista</system:String>
+    <system:String x:Key="update">Actualização</system:String>
+    <system:String x:Key="click-on-update">Clique em "Actualização"</system:String>
+    <system:String x:Key="cancel">Cancelar</system:String>
+    <system:String x:Key="extracting">Extracção dos ficheiros</system:String>
+    <system:String x:Key="installing">Instalando...</system:String>
+</ResourceDictionary> 

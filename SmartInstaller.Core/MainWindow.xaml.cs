@@ -1,20 +1,17 @@
 ﻿
 using System;
-using System.ComponentModel;
 using System.Reflection;
-using System.Net;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
 using System.IO.Compression;
 using System.Threading.Tasks;
 using System.Text.Json;
 using IWshRuntimeLibrary;
 using Microsoft.Win32;
-using System.Windows.Media.Imaging;
 using System.Diagnostics;
 using System.Windows.Media;
 using File = System.IO.File;
+using System.Globalization;
 
 namespace SmartInstaller
 {
@@ -33,6 +30,9 @@ namespace SmartInstaller
         //Change this line to change installer theme
         public Theme Theme = Theme.Auto;
 
+        //Change this line to change if the installer adds the program to PATH by default
+        public bool AddToPath = false;
+
         //Brushes that changes with Light or Dark theme
         public Brush BackgroundColorBrush { get; private set; }
         public Brush ButtonBackgroundColorBrush { get; private set; }
@@ -48,6 +48,8 @@ namespace SmartInstaller
         public MainWindow()
         {
             InitializeComponent();
+            if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar")
+                FlowDirection = FlowDirection.RightToLeft;
             InitializeInstaller();
             InitTheme();
         }
@@ -56,7 +58,7 @@ namespace SmartInstaller
         private void InitializeInstaller()
         {
             var assembly = this.GetType().GetTypeInfo().Assembly;
-            var resourceName = "SmartInstaller.package.json";
+            var resourceName = assembly.GetName().Name + ".package.json";
             using (Stream stream = assembly.GetManifestResourceStream(resourceName)!)
             using (StreamReader reader = new StreamReader(stream))
             {
@@ -68,13 +70,13 @@ namespace SmartInstaller
             title.Content = ApplicationName;
             version.Content = "Version " + _programData.VersionName;
             Progress = 0;
-            txt.Content = "Click on \"Install\"";
+            txt.Content = GetString("click-on-install");
 
             //check if program is installed
             if(File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu) + "\\" + ApplicationName + ".lnk"))
             {
-                btnDownload.Content = "Update";
-                txt.Content = "Click on \"Update\"";
+                btnDownload.Content = GetString("update");
+                txt.Content = GetString("click-on-update");
             }
         }
 
@@ -170,9 +172,9 @@ namespace SmartInstaller
                 Directory.Delete(TempDir);
             }
             catch { }
-            if (autoStart && (string)btnDownload.Content == "Quit")
+            if (autoStart && (string)btnDownload.Content == GetString("quit"))
             {
-                System.Diagnostics.Process p = new System.Diagnostics.Process();
+                Process p = new Process();
                 p.StartInfo.FileName = InstallationPath + "\\" + ApplicationName + "\\" + _programData.MainExe;
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.RedirectStandardOutput = true;
@@ -183,18 +185,18 @@ namespace SmartInstaller
 
         private async void btnDownload_Click(object sender, RoutedEventArgs e)
         {
-            btnDownload.Content = "Cancel";
+            btnDownload.Content = GetString("cancel");
             btnDownload.Click -= btnDownload_Click;
             btnDownload.Click += Button_Click;
             //Creating temp directory for the download
             string result = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
             Directory.CreateDirectory(result + "\\TempSmartInstaller");
             TempDir = result + "\\TempSmartInstaller\\";
-            txt.Content = "Preparing";
+            txt.Content = GetString("preparing");
             await Task.Delay(100);
             //Start extracting
             //Copy file from resource
-            await File.WriteAllBytesAsync(TempDir + "arch.zip", ReadResource("package.zip"));
+            File.WriteAllBytes(TempDir + "arch.zip", ReadResource("package.zip"));
             Progress = 100;
             pb.Value = Progress;
             Completed();
@@ -206,11 +208,15 @@ namespace SmartInstaller
             //Extracting the archive
             await Task.Delay(100);
             bool b = true;
-            txt.Content = "Extracting";
+            txt.Content = GetString("extracting");
             await Task.Delay(100);
             try
             {
+#if NETCOREAPP
+                ZipFile.ExtractToDirectory(TempDir + "arch.zip", TempDir, true);
+#else
                 ZipFile.ExtractToDirectory(TempDir + "arch.zip", TempDir);
+#endif
 
             }
             catch (FileNotFoundException)
@@ -221,13 +227,17 @@ namespace SmartInstaller
             {
                 b = false;
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
             if (b)
             {
-                string js = System.IO.File.ReadAllText(TempDir + "package.json");
-                _programData = JsonSerializer.Deserialize<ProgramData>(js);
+                string js = File.ReadAllText(TempDir + "package.json");
+                _programData = JsonSerializer.Deserialize<ProgramData>(js)!;
                 Progress = 150;
                 pb.Value = Progress;
-                txt.Content = "Installing...";
+                txt.Content = GetString("installing");
                 await Task.Delay(100);
 
 
@@ -248,11 +258,11 @@ namespace SmartInstaller
                     }
                 }
                 DirectoryCopy(TempDir + "bin", InstallationPath + "\\" + ApplicationName, true);
-                var remover = GetStreamFromFile("Remove.exe");
+                var remover = ReadEmbeddedResource("Remove.exe");
                 SaveStreamAsFile(InstallationPath + "\\" + ApplicationName + "\\" + "Remove.exe", remover);
 
-                System.IO.File.Move(TempDir + "package.json", InstallationPath + "\\" + ApplicationName + "\\package.json");
-                System.IO.DirectoryInfo di = new DirectoryInfo(TempDir);
+                File.Move(TempDir + "package.json", InstallationPath + "\\" + ApplicationName + "\\package.json");
+                DirectoryInfo di = new DirectoryInfo(TempDir);
 
                 //Deleting temp files
                 foreach (FileInfo file in di.GetFiles())
@@ -264,6 +274,20 @@ namespace SmartInstaller
                     dirt.Delete(true);
                 }
                 Directory.Delete(TempDir);
+                //Adding to PATH
+                if (AddToPath)
+                {
+                    var pathToAdd = InstallationPath + "\\" + ApplicationName + "\\";
+                    var name = "PATH";
+                    var scope = EnvironmentVariableTarget.Machine;
+                    var oldValue = Environment.GetEnvironmentVariable(name, scope)!;
+                    if (!oldValue.Contains(pathToAdd))
+                    {
+                        Debug.WriteLine("ADDING TO PATH : " + oldValue);
+                        var newValue = oldValue + ";" + pathToAdd;
+                        Environment.SetEnvironmentVariable(name, newValue, scope);
+                    }
+                }
                 //Creating shortcuts
                 if (desktopShortcut) CreateShortcut(ApplicationName, Environment.GetFolderPath(Environment.SpecialFolder.Desktop), InstallationPath + "\\" + ApplicationName + "\\" + _programData.MainExe);
                 CreateShortcut(ApplicationName, Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), InstallationPath + "\\" + ApplicationName + "\\" + _programData.MainExe);
@@ -271,8 +295,8 @@ namespace SmartInstaller
                 UninstallRegistery();
                 Progress = 200;
                 pb.Value = Progress;
-                txt.Content = "Finished installing";
-                btnDownload.Content = "Quit";
+                txt.Content = GetString("finished");
+                btnDownload.Content = GetString("quit");
             }
             else
             {
@@ -287,14 +311,21 @@ namespace SmartInstaller
                 catch { }
                 Progress = 0;
                 pb.Value = Progress;
-                btnDownload.Content = "Install";
+                btnDownload.Content = GetString("install");
                 if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu) + "\\" + ApplicationName + ".lnk"))
                 {
-                    btnDownload.Content = "Update";
+                    btnDownload.Content = GetString("update");
                 }
                 btnDownload.Click -= Button_Click;
                 btnDownload.Click += btnDownload_Click;
             }
+        }
+
+        static Stream ReadEmbeddedResource(string res)
+        {
+            var asm = Assembly.GetEntryAssembly();
+            var stream = asm.GetManifestResourceStream(asm.GetName().Name + "." + res.Replace('/', '.'))!;
+            return stream;
         }
 
 
@@ -323,8 +354,6 @@ namespace SmartInstaller
                 inputStream.CopyTo(outputFileStream);
             }
         }
-
-
 
 
         public static void CreateShortcut(string shortcutName, string shortcutPath, string targetFileLocation)
@@ -385,23 +414,9 @@ namespace SmartInstaller
         }
 
 
-
-        private static Stream GetStreamFromFile(string filename)
+        private static byte[] ReadResource(string res)
         {
-            var assembly = typeof(MainWindow).GetTypeInfo().Assembly;
-
-            var stream = assembly.GetManifestResourceStream("SmartInstaller." + filename);
-
-            return stream;
-        }
-
-        private static byte[] ReadResource(string resourceName)
-        {
-            System.Reflection.Assembly a = typeof(MainWindow).GetTypeInfo().Assembly;
-            ;
-            string fileName = a.GetName().Name + "." + resourceName;
-
-            using (Stream resFilestream = a.GetManifestResourceStream(fileName))
+            using (Stream resFilestream = ReadEmbeddedResource(res))
             {
                 if (resFilestream == null) return null;
                 byte[] ba = new byte[resFilestream.Length];
@@ -409,7 +424,17 @@ namespace SmartInstaller
                 var byteArray = ba;
                 return byteArray;
             }
+        }
 
+        private static string GetString(string key)
+        {
+            object resource = Application.Current.TryFindResource(key);
+            string? settingsString = resource as string;
+            if (settingsString != null)
+            {
+                return settingsString;
+            }
+            throw new FileNotFoundException($"Resource {key} not found");
         }
     }
 

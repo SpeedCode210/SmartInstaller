@@ -6,39 +6,18 @@
         xmlns:local="clr-namespace:SmartInstaller"
         mc:Ignorable="d" Icon="smart_installer.ico"
         Title="Smart Installer" Height="460" Width="810" WindowStyle="None" Background="Transparent" AllowsTransparency="True" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
-    <Window.Resources>
-        <Style x:Key="{x:Type ProgressBar}"
-       TargetType="{x:Type ProgressBar}">
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ProgressBar">
-                        <Border  BorderThickness="0" Background="{Binding ButtonBackgroundColorBrush}" CornerRadius="5" Padding="0">
-
-                            <Border.Effect>
-                                <DropShadowEffect BlurRadius="5" ShadowDepth="0" Opacity="0.3" Direction="225" />
-                            </Border.Effect>
-                            <Grid x:Name="PART_Track">
-                                <Border x:Name="PART_Indicator" HorizontalAlignment="Left" BorderThickness="0" Background="{Binding AccentColorBrush}" CornerRadius="5" Padding="0">
-                                </Border>
-                            </Grid>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-
-
-        </Style>
-
-    </Window.Resources>
     <Grid>
         <Border Background="{Binding BackgroundColorBrush}" BorderThickness="0" Margin="18" BorderBrush="Transparent" CornerRadius="8,8,8,8" MouseLeftButtonDown="Border_MouseLeftButtonDown">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="18" ShadowDepth="0" Opacity="0.3" Direction="225" />
             </Border.Effect>
             <Grid>
-                <Label Foreground="{Binding ForegroundColorBrush}" VerticalContentAlignment="Center" Content="Smart Installer" FontFamily="./#Segoe UI Variable Display" FontSize="20" FontWeight="Normal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="330,8,0,0" Height="32" />
-                <Image Source="smart_installer.png" Width="32" Height="32" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="298,12,0,0"/>
+                <Label Foreground="{Binding ForegroundColorBrush}" VerticalContentAlignment="Center"
+                       HorizontalContentAlignment="Center" Content="Smart Installer"
+                       FontFamily="./#Segoe UI Variable Display" FontSize="20" FontWeight="Normal"
+                       VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Height="32" />
+                
+                <Image Source="smart_installer.png" Width="32" Height="32" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,15,162,0"/>
                 <Button Click="Button_Click" HorizontalAlignment="Right" VerticalAlignment="Top" Height="31" Width="46" FontSize="19">
                     <Button.Style>
                         <Style TargetType="{x:Type Button}">
@@ -61,21 +40,23 @@
                             </Style.Triggers>
                         </Style>
                     </Button.Style>
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="./#Segoe Fluent Icons" FontSize="15" TextOptions.TextRenderingMode="Grayscale" Height="16" Width="24"><Run Text=" "/><Run Text="&#xEDAE;"/></TextBlock>
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontFamily="./#Segoe Fluent Icons" FontSize="15">
+                        <Run Text="&#xEDAE;"/>
+                    </TextBlock>
                 </Button>
                 <Image x:Name="Logo" Source="icon.png" VerticalAlignment="Center" Width="150" Height="150" HorizontalAlignment="Left" Margin="150,0,0,60" >
                     <Image.Effect>
                         <DropShadowEffect BlurRadius="6" ShadowDepth="0" Opacity="0.4" Direction="225" />
                     </Image.Effect>
                 </Image>
-                <Label Foreground="{Binding ForegroundColorBrush}" Content="Installation program of" FontFamily="./#Segoe UI Variable Display" FontSize="26" FontWeight="Normal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="330,116,0,0" />
+                <Label Foreground="{Binding ForegroundColorBrush}" Content="{DynamicResource installation-of}" FontFamily="./#Segoe UI Variable Display" FontSize="26" FontWeight="Normal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="330,116,0,0" />
                 <Label Foreground="{Binding ForegroundColorBrush}" x:Name="title" Content="ApplicationName"  VerticalAlignment="Top" HorizontalAlignment="Left"  FontSize="50" Margin="330,144,0,0"  />
                 <Rectangle Fill="{Binding SeparatorColorBrush}" Margin="0,0,0,125" Height="1" VerticalAlignment="Bottom" />
                 <Border Background="{Binding SecondBackgroundColorBrush}" BorderThickness="0" BorderBrush="Transparent" CornerRadius="0,0,8,8" VerticalAlignment="Bottom" Height="125">
                     <Grid>
                         <Label x:Name="txt" FontFamily="./#Segoe UI Variable Display" Content="" Foreground="{Binding ForegroundColorBrush}" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" FontSize="16" FontWeight="Normal" Margin="0,0,0,80" />
                         <ProgressBar x:Name="pb" Width="700" Height="10" Minimum="0" Maximum="200" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,65" />
-                        <Button x:Name="btnDownload"  Content="Install" FontFamily="./#Segoe UI Variable Display" Click="btnDownload_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Width="184" FontSize="19"  Foreground="{Binding ButtonContrastColorBrush}" Margin="10">
+                        <Button x:Name="btnDownload"  Content="{DynamicResource install}" FontFamily="./#Segoe UI Variable Display" Click="btnDownload_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Width="184" FontSize="19"  Foreground="{Binding ButtonContrastColorBrush}" Margin="10">
                             <Button.Style>
                                 <Style TargetType="{x:Type Button}">
                                     <Setter Property="Background" Value="{Binding AccentColorBrush}"/>
@@ -122,8 +103,7 @@
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="./#Segoe Fluent Icons" FontSize="22" TextOptions.TextRenderingMode="Grayscale" Height="22" Width="34"><Run Text=" "/><Run Text="&#xE713;"/></TextBlock>
-
+                            <TextBlock VerticalAlignment="Center" TextAlignment="Center" HorizontalAlignment="Center" FontFamily="./#Segoe Fluent Icons" FontSize="22"><Run Text="&#xE713;"/></TextBlock>
                         </Button>
                     </Grid>
                 </Border>

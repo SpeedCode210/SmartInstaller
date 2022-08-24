@@ -1,0 +1,23 @@
+﻿<ResourceDictionary 
+        xmlns ="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:system="clr-namespace:System;assembly=mscorlib">
+    
+    <system:String x:Key="install">Installer</system:String>
+    <system:String x:Key="installation-of">Programme d'installation de</system:String>
+    <system:String x:Key="click-on-install">Cliquez sur "Installer"</system:String>
+    <system:String x:Key="submit">Valider</system:String>
+    <system:String x:Key="add-to-path">Ajouter au PATH</system:String>
+    <system:String x:Key="installation-settings">Paramètres d'installation</system:String>
+    <system:String x:Key="install-path">Chemin d'installation</system:String>
+    <system:String x:Key="create-shortcut">Créer un raccourci sur le bureau</system:String>
+    <system:String x:Key="run-on-finish">Exécuter l'application à la fin</system:String>
+    <system:String x:Key="finished">Installation terminée</system:String>
+    <system:String x:Key="preparing">Préparation</system:String>
+    <system:String x:Key="quit">Quitter</system:String>
+    <system:String x:Key="update">Mettre à jour</system:String>
+    <system:String x:Key="click-on-update">Cliquez sur "Mettre à jour"</system:String>
+    <system:String x:Key="cancel">Annuler</system:String>
+    <system:String x:Key="extracting">Extraction</system:String>
+    <system:String x:Key="installing">Installation en cours...</system:String>
+</ResourceDictionary> 

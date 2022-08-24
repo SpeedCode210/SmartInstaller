@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFrameworks>net6.0-windows</TargetFrameworks>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<PublishSingleFile>true</PublishSingleFile>
+		<SelfContained>false</SelfContained>
+		<ApplicationIcon>smart_installer.ico</ApplicationIcon>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<AssemblyVersion>3.0</AssemblyVersion>
+		<FileVersion>3.0</FileVersion>
+		<RepositoryUrl>https://github.com/SpeedCode210/SmartInstaller.git</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<Copyright>Copyright Raouf Ould Ali ©  2022</Copyright>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<Company>SmartInstaller</Company>
+		<Product>SmartInstaller</Product>
+	</PropertyGroup>
+
+	<Import Project="..\SmartInstaller.Core\SmartInstaller.Core.projitems" Label="Shared" />
+
+	<ItemGroup>
+		<None Remove="Remove.exe" />
+		<None Remove="smart_installer.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<COMReference Include="IWshRuntimeLibrary">
+			<WrapperTool>tlbimp</WrapperTool>
+			<VersionMinor>0</VersionMinor>
+			<VersionMajor>1</VersionMajor>
+			<Guid>f935dc20-1cf0-11d0-adb9-00c04fd58a0b</Guid>
+			<Lcid>0</Lcid>
+			<Isolated>false</Isolated>
+			<EmbedInteropTypes>true</EmbedInteropTypes>
+		</COMReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Remove.exe" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
+		<PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="smart_installer.ico" />
+	</ItemGroup>
+
+</Project>
