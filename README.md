@@ -13,17 +13,17 @@ It also includes a dark theme that matches the windows theme.
 
 ## Requirements for the compilation
 
-- .NET SDK 6
+- .NET SDK 6 / .NET Framework Targeting Pack 4.7.2
 
 ## User requirements
 
-- .NET Desktop Runtime 6
+- .NET Desktop Runtime 6 / .NET Framework 4.x
 
 - Windows 7 or later
 
 ## Generating the installer
 
-Just replace the package.json data and the installation package
+Just replace the package.json data and the installation package (package.zip)
 
 ## Installation package
 
